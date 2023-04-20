@@ -1,0 +1,29 @@
+div.partyPokemon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ddd;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+div.partyPokemon:last-child {
+  margin-bottom: 0;
+}
+
+div.pcStorage {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 6px;
+  flex-grow: 1;
+  width: 80%;
+}
+
+div.storagePokemon {
+  background-color: #ddd;
+  margin: 16px 16px 16px 0;
+  padding: 1rem;
+  border-radius: 6px;
+  height: fit-content;
+}
