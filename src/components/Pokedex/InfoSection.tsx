@@ -6,14 +6,14 @@ import { capitalize } from 'utils/Utils';
 function InfoSection(props: any) {
   return (
     <Box component='div'>
-      {props.selectedPoke.id ? (
+      {props.selectedPokemon.id ? (
         <Box component='div'>
           <Typography component='h2' aria-label='Name' fontWeight='bold' className={styles.name}>
-            {capitalize(props.selectedPoke?.name)}
+            {capitalize(props.selectedPokemon?.name)}
           </Typography>
           <Typography component='h4' aria-label='Type'>
-            Type: {capitalize(props.selectedPoke?.types[0].type.name)}{' '}
-            {props.selectedPoke?.types[1] ? `| ${capitalize(props.selectedPoke?.types[1].type.name)}` : ''}
+            Type: {capitalize(props.selectedPokemon?.types[0].type.name)}{' '}
+            {props.selectedPokemon?.types[1] ? `| ${capitalize(props.selectedPokemon?.types[1].type.name)}` : ''}
           </Typography>
           <Typography component='h4' aria-label='Height'>
             Height:

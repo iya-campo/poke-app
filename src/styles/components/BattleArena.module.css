@@ -1,0 +1,11 @@
+div.trainerImg {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+div.pokemonImg {
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+}

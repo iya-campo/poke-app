@@ -1,0 +1,13 @@
+div.pokePlaza {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: white;
+  height: 200px;
+  flex-grow: 1;
+}

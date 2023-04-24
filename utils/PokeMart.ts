@@ -34,6 +34,33 @@ export const pokeMart = [
         stock: 100,
         inCart: 0,
         icon: '',
+    },
+    {
+        id: 7,
+        name: 'Sweet Pokeblock',
+        type: 'Pokeblock',
+        price: 100,
+        stock: 100,
+        inCart: 0,
+        icon: '',
+    },
+    {
+        id: 8,
+        name: 'Sour Pokeblock',
+        type: 'Pokeblock',
+        price: 100,
+        stock: 100,
+        inCart: 0,
+        icon: '',
+    },
+    {
+        id: 9,
+        name: 'Spicy Pokeblock',
+        type: 'Pokeblock',
+        price: 100,
+        stock: 100,
+        inCart: 0,
+        icon: '',
     }
 ]
 

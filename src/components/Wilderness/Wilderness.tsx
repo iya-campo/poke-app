@@ -5,13 +5,10 @@ import EncounterFrame from './EncounterFrame';
 import PartyLeader from './PartyLeader';
 import { Container, Box, Button, Typography } from '@mui/material';
 import { randomNumberGenerator } from 'utils/Utils';
-import myTeam from 'utils/MyTeam';
-import pokeBag from 'utils/PokeBag';
 
 function Wilderness(props: any) {
   const [wildPokemons, setWildPokemons]: any = useState([]);
   const [zoneImg, setZoneImg]: any = useState(0);
-  const [partyLeader, setPartyLeader]: any = useState(props.team[0]);
   const [selectedBall, setSelectedBall]: any = useState(props.playerItems[0]);
   const [encounter, setEncounter]: any = useState([]);
   const [hasEncounter, setHasEncounter]: any = useState(false);
@@ -19,7 +16,7 @@ function Wilderness(props: any) {
   useEffect(() => {
     // update states as use state default only sets at render
     if (!selectedBall) setSelectedBall(props.playerItems[0]);
-    if (!partyLeader) setPartyLeader(props.team[0]);
+    if (!props.partyLeader) props.setPartyLeader(props.team[0]);
   }, [props.playerItems, props.team]);
 
   const exploreWilds = () => {
@@ -27,7 +24,7 @@ function Wilderness(props: any) {
   };
 
   const randomEncounter = () => {
-    const num = randomNumberGenerator(0, 30);
+    const num = randomNumberGenerator(0, wildPokemons.length + 5);
     const match = wildPokemons.find((e: any) => e.id === num);
     setEncounter(match);
     setHasEncounter(match ? true : false);
@@ -44,8 +41,8 @@ function Wilderness(props: any) {
             encounter={encounter}
             hasEncounter={hasEncounter}
             setHasEncounter={setHasEncounter}
-            partyLeader={partyLeader}
-            setPartyLeader={setPartyLeader}
+            partyLeader={props.partyLeader}
+            setPartyLeader={props.setPartyLeader}
             team={props.team}
             setTeam={props.setTeam}
             playerItems={props.playerItems}
@@ -58,10 +55,10 @@ function Wilderness(props: any) {
             <Button variant='contained' onClick={() => exploreWilds()} sx={{ mr: 3, px: 4 }}>
               Explore
             </Button>
-            <PartyLeader team={props.team} partyLeader={partyLeader} setPartyLeader={setPartyLeader} />
+            <PartyLeader team={props.team} partyLeader={props.partyLeader} setPartyLeader={props.setPartyLeader} />
           </Box>
         </Box>
-        <Box component='div' className={styles.zoneImg} sx={{ backgroundImage: zoneImg }}>
+        <Box component='div' className={styles.zoneImg} sx={{ backgroundImage: zoneImg }} mt={2}>
           <Zones setZoneImg={setZoneImg} setWildPokemons={setWildPokemons}></Zones>
         </Box>
       </Box>

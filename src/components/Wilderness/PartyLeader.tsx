@@ -9,7 +9,7 @@ function PartyLeader(props: any) {
 
   return (
     <Box component='div'>
-      <FormControl fullWidth>
+      <FormControl sx={{ width: '150px' }}>
         <InputLabel id='simple-select-label'>Party Leader</InputLabel>
         <Select
           labelId='simple-select-label'
@@ -18,17 +18,18 @@ function PartyLeader(props: any) {
           value={props.partyLeader ? props.partyLeader?.order : 0}
           onChange={changePartyLeader}
         >
-          {props.team?.map((e: any, index: number) => {
+          {props.team?.map((partyPokemon: any, index: number) => {
             return (
               <MenuItem key={index} value={index}>
-                {e.name}
+                {partyPokemon.name}
               </MenuItem>
             );
           })}
         </Select>
       </FormControl>
-      <Box component='div' mt={1}>
-        <Typography>{`HP : ${props.partyLeader?.hp} / ${props.partyLeader?.maxHp}`}</Typography>
+      <Box component='div' display='flex' justifyContent='space-between' mt={1}>
+        <Typography component='span'>{`Lvl. ${props.partyLeader?.level}`}</Typography>
+        <Typography component='span'>{`HP : ${props.partyLeader?.hp} / ${props.partyLeader?.maxHp}`}</Typography>
       </Box>
     </Box>
   );

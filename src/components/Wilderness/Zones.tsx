@@ -1,24 +1,24 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, ButtonGroup, Button } from '@mui/material';
 import PokemonAPI from '@/pages/api/PokemonAPI';
-import { checkTypeMatch } from 'utils/Utils';
+import { findMatchingTypes } from 'utils/Utils';
 
 function Zones(props: any) {
   const allocWildPokemon = (zone: string, wildPokemons: any) => {
     let list = [];
     switch (zone) {
       case 'forest':
-        list = wildPokemons.filter((wildPokemon: any) => checkTypeMatch(['grass', 'normal', 'bug'], wildPokemon));
+        list = wildPokemons.filter((wildPokemon: any) => findMatchingTypes(['grass', 'normal', 'bug'], wildPokemon));
         props.setWildPokemons(list);
         props.setZoneImg(`url('/images/forest.png')`);
         break;
       case 'ocean':
-        list = wildPokemons.filter((wildPokemon: any) => checkTypeMatch(['water', 'ice'], wildPokemon));
+        list = wildPokemons.filter((wildPokemon: any) => findMatchingTypes(['water', 'ice'], wildPokemon));
         props.setWildPokemons(list);
         props.setZoneImg(`url('/images/ocean.png')`);
         break;
       case 'volcano':
-        list = wildPokemons.filter((wildPokemon: any) => checkTypeMatch(['fire', 'rock', 'ground'], wildPokemon));
+        list = wildPokemons.filter((wildPokemon: any) => findMatchingTypes(['fire', 'rock', 'ground'], wildPokemon));
         props.setWildPokemons(list);
         props.setZoneImg(`url('/images/volcano.jfif')`);
         break;

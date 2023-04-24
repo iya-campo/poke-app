@@ -1,0 +1,17 @@
+div.modalContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  pointer-events: none;
+}
+
+div.modalContent {
+  background-color: white;
+  border-radius: 6px;
+  padding: 2rem;
+  min-height: 200px;
+  min-width: 400px;
+  pointer-events: all;
+}

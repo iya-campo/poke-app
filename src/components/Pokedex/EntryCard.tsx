@@ -14,11 +14,12 @@ const EntryCard = (props: any) => {
 
   return (
     <Box component='div' sx={{ width: '100%' }}>
-      <Button className={styles.card} onClick={() => props.setSelectedPoke(props.data)}>
-        <Typography component='span'>{props.data.name}</Typography>
-
-        <IconButton component='label' aria-label='add to favorites' color='primary' onClick={() => handleFavorites(props.data)}>
-          {props.favoritesList.includes(props.data) ? <Favorite /> : <FavoriteBorder />}
+      <Button className={styles.card} onClick={() => props.setSelectedPokemon(props.pokemon)}>
+        <Typography component='span' sx={{ textAlign: 'left', flexGrow: '1' }}>
+          {props.pokemon.name}
+        </Typography>
+        <IconButton component='label' aria-label='add to favorites' color='primary' onClick={() => handleFavorites(props.pokemon)}>
+          {props.favoritesList.includes(props.pokemon) ? <Favorite /> : <FavoriteBorder />}
         </IconButton>
       </Button>
     </Box>

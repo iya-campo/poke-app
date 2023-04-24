@@ -12,7 +12,7 @@ const Pokedex = () => {
   const [formats, setFormats]: any = useState(() => ['text']);
   let [pokemonList, setPokemonList]: any = useState([]);
   let [searchList, setSearchList]: any = useState([]);
-  let [selectedPoke, setSelectedPoke]: any = useState({});
+  let [selectedPokemon, setSelectedPokemon]: any = useState({});
   let [favoritesList, setFavoritesList]: any = useState([]);
 
   useEffect(() => {
@@ -71,19 +71,18 @@ const Pokedex = () => {
         </Box>
         <Box component='div' className={styles.container}>
           <Box component='div' flex={'0 0 20%'} className={styles.listSection}>
-            {searchList.map((e: any, index: number) => (
+            {searchList.map((pokemon: any, index: number) => (
               <EntryCard
                 key={index}
-                id={index}
-                data={e}
-                setSelectedPoke={setSelectedPoke}
+                pokemon={pokemon}
+                setSelectedPokemon={setSelectedPokemon}
                 favoritesList={favoritesList}
                 setFavoritesList={setFavoritesList}
               />
             ))}
           </Box>
           <Box component='div' flex={'0 0 78%'} className={styles.infoSection}>
-            <InfoSection selectedPoke={selectedPoke} />
+            <InfoSection selectedPokemon={selectedPokemon} />
           </Box>
         </Box>
       </Container>
