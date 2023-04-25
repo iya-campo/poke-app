@@ -41,13 +41,13 @@ function DayCare(props: any) {
   };
 
   return (
-    <Box component='div'>
+    <Box component='div' className={styles.dayCareModal}>
       <Box display='flex' justifyContent='space-between' pb={1}>
         <Typography component='h2'>Day Care</Typography>
       </Box>
       <Divider sx={{ mb: 2 }} />
       <Box component='div' display='flex' justifyContent='space-between' flexWrap='wrap'>
-        <Box component='div' display='flex' flexDirection='column' justifyContent='center' flexGrow={1} mr={4}>
+        <Box component='div' display='flex' flexDirection='column' justifyContent='center' width='180px'>
           <Box component='div' display='flex' justifyContent='space-between' alignItems='center' mb={2}>
             <Box display='flex' flexDirection='column'>
               {[...Array(5 - Math.trunc(activePokemon?.affection / 10)).keys()].map((index: number) => (
@@ -61,13 +61,13 @@ function DayCare(props: any) {
           </Box>
           <Button variant='contained' onClick={petPokemon}>{`Pet ${activePokemon.name}`}</Button>
         </Box>
-        <Box component='div' display='flex' flexDirection='column' flexGrow={1} alignItems='flex-end'>
+        <Box component='div' display='flex' flexDirection='column' width='200px'>
           <FormControl sx={{ mb: 2 }} fullWidth>
-            <InputLabel id='simple-select-label'>Party Leader</InputLabel>
+            <InputLabel id='simple-select-label'>Active Pokemon</InputLabel>
             <Select
               labelId='simple-select-label'
               id='simple-select'
-              label='Party Leader'
+              label='Active Pokemon'
               value={activePokemon ? activePokemon?.order : 0}
               onChange={changeActivePokemon}
             >
@@ -83,7 +83,7 @@ function DayCare(props: any) {
           <Typography component='span' textAlign='center' width='100%' pt={1} pb={1}>
             Feed Pokeblocks
           </Typography>
-          <Box display='flex' justifyContent={pokeblocks.length < 3 ? 'flex-start' : 'space-between'} flexWrap='wrap' width='210px'>
+          <Box display='flex' justifyContent={pokeblocks.length < 3 ? 'flex-start' : 'space-between'} flexWrap='wrap'>
             {pokeblocks.length > 0 ? (
               pokeblocks.map((pokeblock: any, index: number) => (
                 <Button

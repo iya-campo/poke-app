@@ -58,7 +58,7 @@ function Wilderness(props: any) {
             <PartyLeader team={props.team} partyLeader={props.partyLeader} setPartyLeader={props.setPartyLeader} />
           </Box>
         </Box>
-        <Box component='div' className={styles.zoneImg} sx={{ backgroundImage: zoneImg }} mt={2}>
+        <Box component='div' className={styles.zoneImg} sx={zoneImg ? { backgroundImage: zoneImg } : { backgroundColor: '#ddd' }} mt={2}>
           <Zones setZoneImg={setZoneImg} setWildPokemons={setWildPokemons}></Zones>
         </Box>
       </Box>

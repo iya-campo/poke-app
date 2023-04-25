@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/styles/components/PokeMart.module.scss';
 import { Container, Box, Typography, Button, Tabs, Tab } from '@mui/material';
 import pokeMart from 'utils/PokeMart';
-import { checkItems, checkPokemonStats, checkValuablePrice } from 'utils/Utils';
+import { checkPokemonStats, checkValuablePrice } from 'utils/Utils';
+import ShopItem from './ShopItem';
 
 function PokeMart(props: any) {
   const [totalAmount, setTotalAmount]: any = useState(0);
@@ -48,7 +49,7 @@ function PokeMart(props: any) {
     setTotalAmount((prevState: any) => prevState - item.price);
   };
 
-  const checkout = (cartItems: any, totalAmount: number) => {
+  const checkout = () => {
     if (totalAmount > props.playerInfo.pokeDollars) return;
     const itemOwned = cartItems.filter((cartItem: any) => props.playerItems.some((playerItem: any) => playerItem.id === cartItem.id));
     Promise.all(
@@ -170,33 +171,12 @@ function PokeMart(props: any) {
           <Box component='div' className={styles.shopContainer}>
             {shopItems
               ? shopItems.map((item: any, index: number) => (
-                  <Box key={item.id} component='div' display='flex' alignItems='center' flexWrap='wrap' py={1}>
-                    <Typography component='span' display='block' pr={6} width={200}>
-                      {item.name}
-                    </Typography>
-                    <Box component='div' pr={6}>
-                      <Button variant='outlined' size='small' disabled={item.inCart <= 0} onClick={() => removeFromCart(item)}>
-                        -
-                      </Button>
-                      <Typography component='span' display='inline-block' width='70px' textAlign='center' px={2}>
-                        {item.inCart}
-                      </Typography>
-                      <Button variant='outlined' size='small' disabled={item.inCart >= 99} onClick={() => addToCart(item)}>
-                        +
-                      </Button>
-                    </Box>
-                    <Box component='div' display='flex'>
-                      <Typography component='span' width='70px' pr={1}>
-                        Owned:
-                      </Typography>
-                      <Typography component='span'>{checkItems(props.playerItems, item.name, 'quantity')}</Typography>
-                    </Box>
-                  </Box>
+                  <ShopItem key={index} playerItems={props.playerItems} item={item} addToCart={addToCart} removeFromCart={removeFromCart} />
                 ))
               : 'Shop is empty.'}
           </Box>
           <Box component='div' display='flex' alignItems='center' mt={2}>
-            <Button variant='contained' sx={{ mr: 2 }} onClick={() => checkout(cartItems, totalAmount)}>
+            <Button variant='contained' sx={{ mr: 2 }} onClick={checkout}>
               Checkout
             </Button>
             <Typography>{`Total: $ ${totalAmount}`}</Typography>

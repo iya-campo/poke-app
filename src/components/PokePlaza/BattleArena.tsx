@@ -75,7 +75,7 @@ function BattleArena(props: any) {
         matchWon = determineSuccess(80);
         reward = REWARDS_LIST[0];
         break;
-      case 'Moderate':
+      case 'Normal':
         matchWon = determineSuccess(50);
         reward = REWARDS_LIST[1];
         break;
@@ -105,12 +105,10 @@ function BattleArena(props: any) {
     } else {
       props.setPlayerItems((prevState: any) => [...prevState, reward]);
     }
-
-    console.log(props.playerItems);
   };
 
   const shuffleTrainer = () => {
-    const randomTeamLength: number = randomNumberGenerator(1, 4);
+    const randomTeamLength: number = randomNumberGenerator(1, 6);
     const randomTeam: any = [];
 
     for (let i = 0; i < randomTeamLength; i++) {
@@ -131,7 +129,7 @@ function BattleArena(props: any) {
       return 'Hard';
     }
     if (checkTeamStats(team) > LOW_TIER && checkTeamStats(team) < HIGH_TIER) {
-      return 'Moderate';
+      return 'Normal';
     }
     if (checkTeamStats(team) <= LOW_TIER) {
       return 'Easy';
@@ -140,7 +138,7 @@ function BattleArena(props: any) {
   };
 
   return (
-    <Box component='div'>
+    <Box component='div' className={styles.battleArenaModal}>
       <Box display='flex' justifyContent='space-between' pb={1}>
         <Typography component='h2'>Battle Arena</Typography>
         <IconButton color='primary' aria-label='shuffle trainer' component='label' sx={{ p: 0 }} onClick={shuffleTrainer}>
@@ -148,33 +146,35 @@ function BattleArena(props: any) {
         </IconButton>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box display='flex' flexWrap='wrap'>
-        <Box mr={2} flexGrow={1} className={styles.trainerImg} sx={{ backgroundImage: `url('/images/trainer.png')` }}></Box>
-        <Box display='flex' flexGrow={1} flexDirection='column' justifyContent='center' width='100px'>
-          <Box component='div' display='flex' justifyContent='center'>
+      <Box display='flex' flexWrap='wrap' alignItems='center'>
+        <Box display='flex' flexDirection='column' flexGrow={1}>
+          <Box className={styles.trainerImg} sx={{ backgroundImage: `url('/images/trainer.png')` }} />
+          <Box textAlign='center' width='100%' pt={2}>
+            <Typography component='span'>{`Difficulty: ${difficulty}`}</Typography>
+          </Box>
+        </Box>
+        <Box display='flex' alignItems='center' justifyContent='space-between' flexDirection='column' width='250px'>
+          <Box component='div' display='flex' justifyContent='center' flexWrap='wrap'>
             {trainer.team.length > 0 &&
               trainer.team.map((pokemon: any, index: number) => (
                 <Box
                   key={index}
                   component='div'
-                  width='50px'
-                  height='50px'
                   className={styles.pokemonImg}
                   sx={{
-                    backgroundImage: `url(${pokemon.sprites.front_default})`,
+                    backgroundImage: `url(${pokemon?.sprites.front_default})`,
                   }}
-                ></Box>
+                />
               ))}
           </Box>
-          <Typography component='h4' textAlign='center' pt={2}>
-            {trainer.name} wants to battle!
-          </Typography>
-          <Typography component='span' textAlign='center' pb={2}>
-            ({difficulty})
-          </Typography>
-          <Button variant='contained' onClick={battleTrainer}>
-            Battle
-          </Button>
+          <Box component='div' display='flex' flexDirection='column' pt={2}>
+            <Typography component='h4' textAlign='center' pb={2}>
+              Trainer {trainer.name} wants to battle!
+            </Typography>
+            <Button variant='contained' onClick={battleTrainer} fullWidth>
+              Battle
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

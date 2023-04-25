@@ -115,44 +115,6 @@ export const myTeam = [
             }
         ],
         img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/58.gif'
-    },{
-        id: 58,
-        order: 3,
-        name: 'Growlithe',
-        types: ['Fire'],
-        affection: 0,
-        hp: 55,
-        maxHp: 55,
-        level: 1,
-        currentExp: 0,
-        expNeeded: 250,
-        stats: [
-            {
-                "name": "hp",
-                "base_stat": 55
-            },
-            {
-                "name": "attack",
-                "base_stat": 62
-            },
-            {
-                "name": "defense",
-                "base_stat": 63
-            },
-            {
-                "name": "special-attack",
-                "base_stat": 80
-            },
-            {
-                "name": "special-defense",
-                "base_stat": 80
-            },
-            {
-                "name": "speed",
-                "base_stat": 60
-            }
-        ],
-        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/58.gif'
     },
 ]
 

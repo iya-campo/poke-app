@@ -56,7 +56,7 @@ export const checkValuablePrice = (valuable: string) => {
 export const checkPokemonStats = (pokemonStats: any) => {
     let avgStat: number = 0;
 
-    if (pokemonStats.length > 0) {
+    if (pokemonStats?.length > 0) {
         avgStat= (pokemonStats[0]?.base_stat +
             pokemonStats[1]?.base_stat +
             pokemonStats[2]?.base_stat +

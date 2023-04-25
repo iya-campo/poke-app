@@ -3,6 +3,7 @@ import styles from '@/styles/components/MyTeam.module.scss';
 import { MoreVert, ArrowUpward, ArrowDownward, Computer } from '@mui/icons-material/';
 import { Container, Box, Typography, Menu, IconButton, MenuItem, Button, ListItemIcon, ListItemText } from '@mui/material';
 import { capitalize } from 'utils/Utils';
+import Image from 'next/image';
 
 function MyTeam(props: any) {
   const [anchorEl, setAnchorEl]: any = React.useState<null | HTMLElement>(null);
@@ -35,8 +36,6 @@ function MyTeam(props: any) {
     }
     setAnchorEl(null);
   };
-
-  const updatePartyLeader = () => {};
 
   const movePokemon = (position: string) => {
     if ((position === 'up' && selectedPokemon.order === 0) || (position === 'down' && selectedPokemon.order === props.team.length - 1)) return;
@@ -99,46 +98,55 @@ function MyTeam(props: any) {
   };
 
   const withdrawPokemon = (pokemon: any) => {
-    let withdrawnPokemon: any = {};
+    if (props.team.length < 6) {
+      let updatedTeam: any = [];
 
-    props.setTeam((prevState: any) => {
       // withdraw pokemon and match object keys
-      withdrawnPokemon = [
-        ...prevState,
-        {
-          id: pokemon.id,
-          order: props.team.length,
-          name: pokemon.name,
-          types: pokemon.types,
-          affection: pokemon.affection,
-          hp: pokemon.hp,
-          maxHp: pokemon.maxHp,
-          level: pokemon.level,
-          currentExp: pokemon.currentExp,
-          expNeeded: pokemon.expNeeded,
-          stats: pokemon.stats,
-          img: pokemon.img,
-        },
-      ];
+      props.setTeam((prevState: any) => {
+        updatedTeam = [
+          ...prevState,
+          {
+            id: pokemon.id,
+            order: props.team.length,
+            name: pokemon.name,
+            types: pokemon.types,
+            affection: pokemon.affection,
+            hp: pokemon.hp,
+            maxHp: pokemon.maxHp,
+            level: pokemon.level,
+            currentExp: pokemon.currentExp,
+            expNeeded: pokemon.expNeeded,
+            stats: pokemon.stats,
+            img: pokemon.img,
+          },
+        ];
+        return updatedTeam;
+      });
+
       // remove withdrawn pokemon from PC storage
       props.setPCStorage(props.pcStorage.toSpliced(props.pcStorage.indexOf(pokemon), 1));
-      console.log(withdrawnPokemon);
-      return withdrawnPokemon;
-    });
+    } else {
+      // alert: your party is full
+    }
   };
 
   return (
     <Container sx={{ my: 4 }}>
       <Typography component='h2'>My Team</Typography>
       <Box component='div' display='flex' flexWrap='wrap' my={2}>
-        <Box component='div' className={styles.partyList} width={props.team.length > 3 ? '400px' : 'auto'}>
+        <Box component='div' className={styles.partyList} width={props.team.length > 3 ? '390px' : '195px'}>
           {props.team?.map((pokemon: any, teamIndex: number) => (
             <Box
               key={teamIndex}
               className={styles.partyPokemon}
               sx={{ backgroundColor: props.partyLeader?.order === pokemon.order ? '#bbb' : '#ddd' }}
             >
-              <Typography component='span'>{pokemon.name}</Typography>
+              <Box component='div' display='flex' justifyContent='flex-start' alignItems='center'>
+                <Image alt='party pokemon' width={30} height={30} src={pokemon.img}></Image>
+                <Typography component='span' pl={2}>
+                  {pokemon.name}
+                </Typography>
+              </Box>
               <IconButton
                 aria-label='more'
                 id='long-button'
@@ -149,6 +157,7 @@ function MyTeam(props: any) {
                   handleClick(e);
                   setSelectedPokemon(pokemon);
                 }}
+                sx={{ px: 0 }}
               >
                 <MoreVert />
               </IconButton>

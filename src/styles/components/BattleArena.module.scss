@@ -1,11 +1,20 @@
+div.battleArenaModal {
+  width: 450px;
+}
+
 div.trainerImg {
+  height: 180px;
+  width: 100%;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 div.pokemonImg {
-  background-size: auto;
+  height: 80px;
+  width: 80px;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin: -8px 0;
 }
