@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from '@/styles/components/MyTeam.module.scss';
 import { MoreVert, ArrowUpward, ArrowDownward, Computer } from '@mui/icons-material/';
 import { Container, Box, Typography, Menu, IconButton, MenuItem, Button, ListItemIcon, ListItemText } from '@mui/material';
-import { capitalize } from 'utils/Utils';
+import PCStorage from './PCStorage';
 import Image from 'next/image';
 
 function MyTeam(props: any) {
@@ -132,7 +132,9 @@ function MyTeam(props: any) {
 
   return (
     <Container sx={{ my: 4 }}>
-      <Typography component='h2'>My Team</Typography>
+      <Typography component='h2' variant='h2'>
+        My Team
+      </Typography>
       <Box component='div' display='flex' flexWrap='wrap' my={2}>
         <Box component='div' className={styles.partyList} width={props.team.length > 3 ? '390px' : '195px'}>
           {props.team?.map((pokemon: any, teamIndex: number) => (
@@ -192,24 +194,7 @@ function MyTeam(props: any) {
             </Box>
           ))}
         </Box>
-        <Box component='div' className={styles.pcStorage}>
-          <Typography component='h4' pb={2}>
-            PC Storage
-          </Typography>
-          {props.pcStorage && props.pcStorage.length > 0 ? (
-            <Box component='div' display='flex' sx={{ maxHeight: '300px', flexWrap: 'wrap', overflowY: 'auto' }}>
-              {props.pcStorage.map((pokemon: any, index: number) => (
-                <Button key={index} variant='outlined' className={styles.storagePokemon} onClick={() => withdrawPokemon(pokemon)}>
-                  {capitalize(pokemon?.name)}
-                </Button>
-              ))}
-            </Box>
-          ) : (
-            <Typography component='span' display='inline-block' pt={2}>
-              Explore the wilderness to catch Pokemon!
-            </Typography>
-          )}
-        </Box>
+        <PCStorage pcStorage={props.pcStorage} withdrawPokemon={withdrawPokemon} />
       </Box>
     </Container>
   );

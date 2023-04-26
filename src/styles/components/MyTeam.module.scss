@@ -18,17 +18,3 @@ div.partyPokemon {
 div.partyPokemon:last-child {
   margin-bottom: 0;
 }
-
-div.pcStorage {
-  background-color: #fff;
-  border-radius: 6px;
-  padding: 1rem;
-  width: 60%;
-  flex-grow: 1;
-}
-
-button.storagePokemon {
-  margin: 0 8px 8px 0;
-  border-radius: 6px;
-  height: fit-content;
-}

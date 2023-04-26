@@ -3,6 +3,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Inter } from '@next/font/google';
 import GlobalHeader from '@/components/GlobalHeader';
+import Alerts from '@/components/Alerts';
+import Greetings from '@/components/Greetings/Greetings';
 import Pokedex from '@/components/Pokedex/Pokedex';
 import Wilderness from '@/components/Wilderness/Wilderness';
 import MyTeam from '@/components/MyTeam/MyTeam';
@@ -24,6 +26,9 @@ export default function Home() {
   const [pcStorage, setPCStorage]: any = useState([]);
   const [partyLeader, setPartyLeader]: any = useState(team[0]);
 
+  const [openAlert, setOpenAlerts]: any = useState({ isOpen: false, msg: '' });
+  const [isInEncounter, setIsInEncounter]: any = useState(false);
+
   useEffect(() => {
     // set initial
     setPlayerInfo(player);
@@ -34,11 +39,12 @@ export default function Home() {
         id: 1,
         order: 0,
         name: 'Bulbasaur',
+        types: ['Grass', 'Poison'],
+        affection: 10,
         hp: 45,
         maxHp: 45,
-        base_experience: 64,
         level: 1,
-        currentExp: 0,
+        currentExp: 150,
         expNeeded: 200,
         stats: [
           {
@@ -66,51 +72,16 @@ export default function Home() {
             base_stat: 60,
           },
         ],
-      },
-      {
-        id: 1,
-        order: 0,
-        name: 'Bulbasaur',
-        hp: 45,
-        maxHp: 45,
-        base_experience: 64,
-        level: 1,
-        currentExp: 0,
-        expNeeded: 200,
-        stats: [
-          {
-            name: 'hp',
-            base_stat: 45,
-          },
-          {
-            name: 'attack',
-            base_stat: 62,
-          },
-          {
-            name: 'defense',
-            base_stat: 63,
-          },
-          {
-            name: 'special-attack',
-            base_stat: 80,
-          },
-          {
-            name: 'special-defense',
-            base_stat: 80,
-          },
-          {
-            name: 'speed',
-            base_stat: 60,
-          },
-        ],
+        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/1.gif',
       },
       {
         id: 16,
         order: 1,
         name: 'Pidgey',
+        types: ['Normal', 'Flying'],
+        affection: 0,
         hp: 40,
         maxHp: 40,
-        base_experience: 50,
         level: 1,
         currentExp: 0,
         expNeeded: 100,
@@ -140,6 +111,46 @@ export default function Home() {
             base_stat: 60,
           },
         ],
+        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/16.gif',
+      },
+      {
+        id: 16,
+        order: 1,
+        name: 'Pidgey',
+        types: ['Normal', 'Flying'],
+        affection: 0,
+        hp: 40,
+        maxHp: 40,
+        level: 1,
+        currentExp: 0,
+        expNeeded: 100,
+        stats: [
+          {
+            name: 'hp',
+            base_stat: 40,
+          },
+          {
+            name: 'attack',
+            base_stat: 62,
+          },
+          {
+            name: 'defense',
+            base_stat: 63,
+          },
+          {
+            name: 'special-attack',
+            base_stat: 80,
+          },
+          {
+            name: 'special-defense',
+            base_stat: 80,
+          },
+          {
+            name: 'speed',
+            base_stat: 60,
+          },
+        ],
+        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/16.gif',
       },
     ]);
   }, []);
@@ -147,6 +158,8 @@ export default function Home() {
   return (
     <ThemeProvider theme={pokemonTheme}>
       <GlobalHeader />
+      <Alerts openAlert={openAlert} setOpenAlerts={setOpenAlerts} />
+      <Greetings playerInfo={playerInfo} />
       <Pokedex />
       <Wilderness
         team={team}
@@ -156,6 +169,8 @@ export default function Home() {
         setPCStorage={setPCStorage}
         partyLeader={partyLeader}
         setPartyLeader={setPartyLeader}
+        setOpenAlerts={setOpenAlerts}
+        setIsInEncounter={setIsInEncounter}
       />
       <MyTeam
         team={team}
@@ -182,6 +197,8 @@ export default function Home() {
         setTeam={setTeam}
         partyLeader={partyLeader}
         setPartyLeader={setPartyLeader}
+        setOpenAlerts={setOpenAlerts}
+        isInEncounter={isInEncounter}
       />
     </ThemeProvider>
   );

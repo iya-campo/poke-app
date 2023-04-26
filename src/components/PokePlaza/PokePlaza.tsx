@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/components/pokePlaza.module.scss';
-import { Healing, Favorite, SportsMma, LocalFlorist } from '@mui/icons-material/';
+import { Healing, Favorite, Cancel, SportsMma, LocalFlorist } from '@mui/icons-material/';
 import { Container, Box, Button, Typography } from '@mui/material';
 import CustomModal from '../CustomModal';
 import BattleArena from './BattleArena';
@@ -31,6 +31,10 @@ function PokePlaza(props: any) {
       pokemon.hp = pokemon.maxHp;
     });
     props.setPartyLeader((prevState: any) => ({ ...prevState, hp: prevState.maxHp }));
+    props.setOpenAlerts({
+      isOpen: true,
+      msg: 'Your Pokemon is fully recovered!',
+    });
   };
 
   return (
@@ -38,28 +42,44 @@ function PokePlaza(props: any) {
       <CustomModal
         open={openBattleArena}
         setOpen={setOpenBattleArena}
-        component={<BattleArena playerItems={props.playerItems} setPlayerItems={props.setPlayerItems} />}
+        component={<BattleArena playerItems={props.playerItems} setPlayerItems={props.setPlayerItems} setOpenAlerts={props.setOpenAlerts} />}
       />
       <CustomModal
         open={openDayCare}
         setOpen={setOpenDayCare}
-        component={<DayCare team={props.team} setTeam={props.setTeam} playerItems={props.playerItems} setPlayerItems={props.setPlayerItems} />}
+        component={
+          <DayCare
+            team={props.team}
+            setTeam={props.setTeam}
+            playerItems={props.playerItems}
+            setPlayerItems={props.setPlayerItems}
+            setOpenAlerts={props.setOpenAlerts}
+          />
+        }
       />
       <Container sx={{ my: 4 }}>
-        <Typography component='h2'>Poke Plaza</Typography>
+        <Typography component='h2' variant='h2'>
+          Poke Plaza
+        </Typography>
         <Box component='div' display='flex' justifyContent='space-between' flexWrap='wrap' my={2}>
           <Box className={styles.pokePlaza}>
-            {isFullyRecovered ? <Favorite fontSize='large' color='primary' /> : <Healing fontSize='large' color='primary' />}
-            <Typography component='h4' py={2}>
+            {props.isInEncounter ? (
+              <Cancel fontSize='large' color='primary' />
+            ) : isFullyRecovered ? (
+              <Favorite fontSize='large' color='primary' />
+            ) : (
+              <Healing fontSize='large' color='primary' />
+            )}
+            <Typography component='h4' variant='h4' py={2}>
               Pokemon Center
             </Typography>
-            <Button variant='contained' onClick={() => healPokemon()}>
-              Restore Party
+            <Button variant='contained' onClick={() => healPokemon()} disabled={props.isInEncounter || isFullyRecovered} sx={{ width: '160px' }}>
+              {props.isInEncounter ? 'In-Battle' : isFullyRecovered ? 'Party is Healthy' : 'Restore Party'}
             </Button>
           </Box>
           <Box className={styles.pokePlaza} mx={2}>
             <SportsMma fontSize='large' color='primary' />
-            <Typography component='h4' py={2}>
+            <Typography component='h4' variant='h4' py={2}>
               Battle Arena
             </Typography>
             <Button variant='contained' onClick={() => handleOpen('Battle Arena')}>
@@ -68,7 +88,7 @@ function PokePlaza(props: any) {
           </Box>
           <Box className={styles.pokePlaza}>
             <LocalFlorist fontSize='large' color='primary' />
-            <Typography component='h4' py={2}>
+            <Typography component='h4' variant='h4' py={2}>
               Day Care
             </Typography>
             <Button variant='contained' onClick={() => handleOpen('Day Care')}>

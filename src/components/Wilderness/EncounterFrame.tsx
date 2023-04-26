@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowDropDown } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography } from '@mui/material';
-import { capitalize, randomNumberGenerator, replaceAll, getTypes, checkPokemonStats } from 'utils/Utils';
+import { capitalize, randomNumberGenerator, getTypes, checkPokemonStats, determineSuccess } from 'utils/Utils';
 
 function EncounterFrame(props: any) {
   const [open, setOpen] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const anchorRef = React.useRef<HTMLDivElement>(null);
 
+  const [isPartyWipedOut, setIsPartyWipedOut] = useState(false);
   const [disableCatch, setDisableCatch] = useState(false);
   const [attemptCount, setAttemptCount] = useState(0);
   const [catchMsg, setCatchMsg] = useState('');
 
   const ballOptions = props.playerItems.filter((playerItem: any) => playerItem.type === 'Ball');
 
-  // pokemon stat avg tiers
-  const HIGH_TIER = 75;
-  const LOW_TIER = 50;
-
   useEffect(() => {
     // reset message and attempt count for every new encounter
     setCatchMsg('');
     setAttemptCount(0);
     setDisableCatch(false);
+    props.setIsInEncounter(false);
   }, [props.encounter]);
 
   useEffect(() => {
@@ -36,34 +34,31 @@ function EncounterFrame(props: any) {
       partyLeader.expNeeded = props.partyLeader.expNeeded;
       partyLeader.level = props.partyLeader.level;
     }
-
-    props.setTeam((prevState: any) => [...prevState]);
+    // check if all pokemon have fainted
+    setIsPartyWipedOut(props.team.every((pokemon: any) => pokemon.hp === 0));
   }, [props.partyLeader]);
 
-  const damagePokemon = () => {
-    // improve to vary damage according to opponent
-    // prevent health from dipping lower than zero
-    const sustainedDamage: number = 10;
-    const affectionBuff: number = props.partyLeader.affection > 0 ? props.partyLeader.affection / 10 : 0;
-    let totalDamageSustained = sustainedDamage - affectionBuff;
+  useEffect(() => {
+    fleeAttempt();
+  }, [attemptCount, isPartyWipedOut]);
 
-    props.setPartyLeader((prevState: any) => ({ ...prevState, hp: prevState.hp - sustainedDamage >= 0 ? prevState.hp - totalDamageSustained : 0 }));
+  const damagePokemon = () => {
+    // varies damage according to opponent's stats
+    // prevent health from dipping lower than zero
+    const sustainedDamage: number = 2 + checkPokemonStats(props.encounter.stats) / 10;
+    const affectionBuff: number = props.partyLeader.affection > 0 ? (sustainedDamage * props.partyLeader.affection) / 100 : 0;
+    const totalDamageSustained = Math.trunc(sustainedDamage - affectionBuff);
+
+    props.setPartyLeader((prevState: any) => ({
+      ...prevState,
+      hp: prevState.hp - totalDamageSustained >= 0 ? prevState.hp - totalDamageSustained : 0,
+    }));
+
+    return totalDamageSustained;
   };
 
-  const gainExp = () => {
-    const wildPokemonStats = props.encounter.stats;
-    let expGained = 0;
-
-    if (checkPokemonStats(wildPokemonStats) >= HIGH_TIER) {
-      expGained = 200;
-    }
-    if (checkPokemonStats(wildPokemonStats) > LOW_TIER && checkPokemonStats(wildPokemonStats) < HIGH_TIER) {
-      expGained = 100;
-    }
-    if (checkPokemonStats(wildPokemonStats) <= LOW_TIER) {
-      expGained = 50;
-    }
-
+  const gainExp = (expGained: number) => {
+    if (props.partyLeader.level >= 99) return;
     props.setPartyLeader((prevState: any) => {
       let updatedPokemon = { ...prevState, currentExp: prevState.currentExp + expGained };
       if (updatedPokemon.currentExp >= updatedPokemon.expNeeded) {
@@ -72,16 +67,36 @@ function EncounterFrame(props: any) {
         updatedPokemon = {
           ...prevState,
           currentExp: prevState.currentExp + expGained,
-          expNeeded: prevState.expNeeded * 2,
+          expNeeded: prevState.expNeeded + 50,
           level: (prevState.level += 1),
+          stats: prevState.stats.map((stat: any) => ({ name: stat.name, base_stat: (stat.base_stat += 2) })),
         };
       }
       return updatedPokemon;
     });
   };
 
-  const deductPokeBalls = (ballId: number) => {
-    const ballUsed = props.playerItems.find((playerItem: any) => playerItem.id === ballId);
+  const tossBall = () => {
+    const catchDifficulty = checkPokemonStats(props.encounter.stats) / 2;
+    let catchResult = false;
+
+    switch (props.selectedBall?.name) {
+      case 'Poke Ball':
+        catchResult = determineSuccess(60 - catchDifficulty);
+      case 'Great Ball':
+        catchResult = determineSuccess(70 - catchDifficulty);
+      case 'Super Ball':
+        catchResult = determineSuccess(80 - catchDifficulty);
+      case 'Ultra Ball':
+        catchResult = determineSuccess(90 - catchDifficulty);
+      default:
+      // set default here.
+    }
+    return catchResult;
+  };
+
+  const deductBalls = () => {
+    const ballUsed = props.playerItems.find((playerItem: any) => playerItem.id === props.selectedBall?.id);
     ballUsed.quantity -= 1;
   };
 
@@ -92,44 +107,31 @@ function EncounterFrame(props: any) {
     setOpen(false);
   };
 
-  const attemptCatch = (selectedBall: any) => {
-    let hasBattleEnded,
-      hasPokemonEscaped = false;
-
-    if (selectedBall?.quantity <= 0 || props.partyLeader?.hp <= 0) {
-      return;
-    }
-
-    if (attemptCount > 3) {
-      hasPokemonEscaped = randomNumberGenerator(0, 100) % 10 === 0 ? true : false;
-      if (hasPokemonEscaped) {
-        const fleeMsg = replaceAll('POKEMON ran away...', { POKEMON: capitalize(props.encounter?.name) });
+  const fleeAttempt = () => {
+    if (attemptCount > 3 || isPartyWipedOut) {
+      const hasPokemonEscaped = randomNumberGenerator(0, 100) % 10 === 0 ? true : false;
+      if (hasPokemonEscaped || isPartyWipedOut) {
+        const fleeMsg = `${capitalize(props.encounter?.name)} fled...`;
         setCatchMsg(fleeMsg);
         setAttemptCount(0);
         setDisableCatch(true);
+        props.setIsInEncounter(false);
         return;
       }
     }
+  };
 
-    switch (selectedBall?.name) {
-      case 'Poke Ball':
-        hasBattleEnded = randomNumberGenerator(0, 100) % 5 === 0 ? true : false;
-        break;
-      case 'Great Ball':
-        hasBattleEnded = randomNumberGenerator(0, 100) % 4 === 0 ? true : false;
-        break;
-      case 'Super Ball':
-        hasBattleEnded = randomNumberGenerator(0, 100) % 3 === 0 ? true : false;
-        break;
-      case 'Ultra Ball':
-        hasBattleEnded = randomNumberGenerator(0, 100) % 2 === 0 ? true : false;
-        break;
-      default:
-      // set default here.
-    }
+  const catchAttempt = () => {
+    if (props.selectedBall?.quantity <= 0 || props.partyLeader?.hp <= 0) return;
 
-    if (hasBattleEnded) {
-      const successMsg = replaceAll('Success! You caught POKEMON.', { POKEMON: capitalize(props.encounter?.name) });
+    if (props.partyLeader?.hp <= damagePokemon()) return;
+
+    if (tossBall()) {
+      const expGained = Math.trunc(checkPokemonStats(props.encounter.stats));
+      const successMsg = `Success! You caught ${capitalize(props.encounter.name)}.\n${props.partyLeader.name} ${
+        props.partyLeader.hp > 0 ? `gained ${expGained} exp.` : 'did not gain exp.'
+      }`;
+      setCatchMsg(successMsg);
       props.setPCStorage((prevState: any) => [
         {
           id: props.encounter.id,
@@ -172,23 +174,21 @@ function EncounterFrame(props: any) {
         },
         ...prevState,
       ]);
-      setCatchMsg(successMsg);
       setAttemptCount(0);
       setDisableCatch(true);
-      gainExp();
+      gainExp(expGained);
+      props.setIsInEncounter(false);
     } else {
-      setAttemptCount((prevState) => {
-        const failMsg = replaceAll('Oh no! POKEMON broke free.\nCatch attempts: COUNT', {
-          POKEMON: capitalize(props.encounter?.name),
-          COUNT: prevState + 1,
-        });
+      setAttemptCount((prevState: any) => {
+        const catchAttempts = prevState + 1;
+        const failMsg = `Oh no! ${capitalize(props.encounter.name)} broke free.\nCatch attempts: ${catchAttempts}`;
         setCatchMsg(failMsg);
-        return (prevState = prevState + 1);
+        return catchAttempts;
       });
+      props.setIsInEncounter(true);
     }
 
-    deductPokeBalls(selectedBall?.id);
-    damagePokemon();
+    deductBalls();
   };
 
   const handleToggle = () => {
@@ -196,27 +196,33 @@ function EncounterFrame(props: any) {
   };
 
   const handleClose = (event: Event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) return;
     setOpen(false);
   };
 
   return (
-    <Box my={2}>
-      {props.hasEncounter ? (
-        <Box component='div' mb={4}>
-          <Box component='div' mb={2}>
-            <Typography component='span'>{`Encountered a wild ${capitalize(props.encounter?.name)}!`}</Typography>
+    <Box mt={2}>
+      {props.encounter ? (
+        <Box component='div'>
+          <Box component='div'>
+            <Typography component='span' display='block'>
+              {catchMsg ? catchMsg : `Encountered a wild ${capitalize(props.encounter?.name)}!`}
+            </Typography>
           </Box>
-          <Box component='div' display='flex' alignContent={'center'}>
+          <Box component='div' display='flex' alignContent={'center'} mt={3}>
             <Box component='div'>
-              <ButtonGroup variant='contained' ref={anchorRef} aria-label='split button' sx={{ height: '50px' }}>
-                <Button
-                  onClick={() => attemptCatch(props.selectedBall)}
-                  disabled={disableCatch || props.selectedBall?.quantity <= 0 || props.partyLeader?.hp <= 0}
-                >
+              <ButtonGroup
+                variant='contained'
+                ref={anchorRef}
+                aria-label='split button'
+                sx={{ height: '50px' }}
+                disabled={
+                  disableCatch ||
+                  props.partyLeader?.hp <= 0 ||
+                  !props.playerItems.some((playerItem: any) => playerItem.type === 'Ball' && playerItem.quantity !== 0)
+                }
+              >
+                <Button onClick={catchAttempt} disabled={props.selectedBall?.quantity <= 0}>
                   {ballOptions[selectedIndex].name}
                 </Button>
                 <Button
@@ -270,7 +276,7 @@ function EncounterFrame(props: any) {
             </Box>
             <Typography sx={{ ml: 2, alignSelf: 'center', width: '200px' }}>
               {props.selectedBall?.quantity > 0 && props.partyLeader?.hp > 0
-                ? catchMsg
+                ? ''
                 : props.partyLeader?.hp > 0
                 ? `You're out of ${props.selectedBall?.name}s!`
                 : 'Your Pokemon has fainted!'}
@@ -278,8 +284,10 @@ function EncounterFrame(props: any) {
           </Box>
         </Box>
       ) : (
-        <Box component='div' mb={4}>
-          <Typography component='span'>No wild Pokemon in sight.</Typography>
+        <Box component='div'>
+          <Typography component='span' display='block'>
+            No wild Pokemon in sight.
+          </Typography>
         </Box>
       )}
     </Box>

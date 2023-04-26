@@ -14,6 +14,11 @@ export const replaceAll = (string: string, mapObj: any) => {
     });
 }
 
+export const textTransform = (string: string) => {
+    const words = string.split(/[-_]/);
+    return `${capitalize(words[0])}${words[1] ? ` ${capitalize(words[1])}` : ''}`
+}
+
 export const getTypes = (types: any) => {
     let convertedTypes = [];
     for (let i = 0; i < types.length; i++) convertedTypes.push(types[i].type.name)
@@ -77,13 +82,13 @@ export const checkTeamStats = (team: any) => {
         avgTeamStat.push(checkPokemonStats(pokemon?.stats))
     })
     
-    statTotal = (avgTeamStat.reduce((partialSum: number, a: number) => partialSum + a, 0)) / avgTeamStat.length;
+    statTotal = (avgTeamStat.reduce((partialSum: number, a: number) => partialSum + a, 0));
 
-    return statTotal / avgTeamStat.length;
+    return statTotal / team.length;
 }
 
 export const determineSuccess = (successRate: number) => {
-    const num = Math.round(Math.floor(Math.random() * 11))
+    const num: number = Math.round(Math.floor(Math.random() * 11))
 
     if (num <= successRate / 10) { 
         return true;

@@ -3,14 +3,14 @@ export const pokeBag = [
         id: 0,
         name: 'Poke Ball',
         type: 'Ball',
-        quantity: 30,
+        quantity: 99,
         icon: '',
     },
     {
         id: 3,
         name: 'Ultra Ball',
         type: 'Ball',
-        quantity: 5,
+        quantity: 1,
         icon: '',
     },
     {

@@ -12,7 +12,7 @@ const Pokedex = () => {
   const [formats, setFormats]: any = useState(() => ['text']);
   let [pokemonList, setPokemonList]: any = useState([]);
   let [searchList, setSearchList]: any = useState([]);
-  let [selectedPokemon, setSelectedPokemon]: any = useState({});
+  let [selectedPokemon, setSelectedPokemon]: any = useState();
   let [favoritesList, setFavoritesList]: any = useState([]);
 
   useEffect(() => {
@@ -51,42 +51,42 @@ const Pokedex = () => {
   };
 
   return (
-    <React.Fragment>
-      <Container sx={{ my: 4 }}>
-        <Typography component='h2'>Pokedex</Typography>
-        <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-          <Search pokemonList={pokemonList} favoritesList={favoritesList} searchBy={formats} setSearchList={setSearchList} />{' '}
-          {/* improve to search by other categories */}
-          <ToggleButtonGroup value={formats} onChange={handleFormat} aria-label='search-filters'>
-            <ToggleButton value='text' aria-label='filter by text'>
-              <FormatColorText />
-            </ToggleButton>
-            <ToggleButton value='type' aria-label='filter by type'>
-              <WaterDrop />
-            </ToggleButton>
-            <ToggleButton value='faves' aria-label='filter by faves'>
-              <Favorite />
-            </ToggleButton>
-          </ToggleButtonGroup>
+    <Container sx={{ my: 4 }}>
+      <Typography component='h2' variant='h2'>
+        Pokedex
+      </Typography>
+      <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+        <Search pokemonList={pokemonList} favoritesList={favoritesList} searchBy={formats} setSearchList={setSearchList} />{' '}
+        {/* improve to search by other categories */}
+        <ToggleButtonGroup value={formats} onChange={handleFormat} aria-label='search-filters'>
+          <ToggleButton value='text' aria-label='filter by text'>
+            <FormatColorText />
+          </ToggleButton>
+          <ToggleButton value='type' aria-label='filter by type'>
+            <WaterDrop />
+          </ToggleButton>
+          <ToggleButton value='faves' aria-label='filter by faves'>
+            <Favorite />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+      <Box component='div' className={styles.container}>
+        <Box component='div' className={styles.listSection} mr={2}>
+          {searchList.map((pokemon: any, index: number) => (
+            <EntryCard
+              key={index}
+              pokemon={pokemon}
+              setSelectedPokemon={setSelectedPokemon}
+              favoritesList={favoritesList}
+              setFavoritesList={setFavoritesList}
+            />
+          ))}
         </Box>
-        <Box component='div' className={styles.container}>
-          <Box component='div' flex={'0 0 20%'} className={styles.listSection}>
-            {searchList.map((pokemon: any, index: number) => (
-              <EntryCard
-                key={index}
-                pokemon={pokemon}
-                setSelectedPokemon={setSelectedPokemon}
-                favoritesList={favoritesList}
-                setFavoritesList={setFavoritesList}
-              />
-            ))}
-          </Box>
-          <Box component='div' flex={'0 0 78%'} className={styles.infoSection}>
-            <InfoSection selectedPokemon={selectedPokemon} />
-          </Box>
+        <Box component='div' className={styles.infoSection}>
+          <InfoSection selectedPokemon={selectedPokemon} />
         </Box>
-      </Container>
-    </React.Fragment>
+      </Box>
+    </Container>
   );
 };
 

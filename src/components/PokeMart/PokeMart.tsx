@@ -14,7 +14,7 @@ function PokeMart(props: any) {
 
   // pokemon stat avg tiers
   const HIGH_TIER = 75;
-  const LOW_TIER = 50;
+  const LOW_TIER = 40;
 
   useEffect(() => {
     setShopItems(pokeMart);
@@ -145,10 +145,15 @@ function PokeMart(props: any) {
 
   return (
     <Container sx={{ my: 4 }}>
-      <Typography component='h2'>Poke Mart</Typography>
-      <Typography component='span' display='inline-block' pt={2}>
-        {`Poke Dollars: $ ${props.playerInfo.pokeDollars}`}
+      <Typography component='h2' variant='h2'>
+        Poke Mart
       </Typography>
+      <Box component='div'>
+        <Typography component='h4' variant='h4' display='inline-block' pt={2}>
+          Poke Dollars:
+        </Typography>
+        <Typography component='span' display='inline-block' pl={0.5}>{`$ ${props.playerInfo.pokeDollars}`}</Typography>
+      </Box>
 
       <Box component='div' sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', my: 2 }}>
         <Tabs
@@ -165,7 +170,7 @@ function PokeMart(props: any) {
           <Tab label='Sell' {...a11yProps(1)} />
         </Tabs>
         <TabPanel value={selectedTab} index={0}>
-          <Typography component='h4' sx={{ mb: 2 }}>
+          <Typography component='h4' variant='h4' sx={{ mb: 2 }}>
             Purchase Supplies
           </Typography>
           <Box component='div' className={styles.shopContainer}>
@@ -179,11 +184,16 @@ function PokeMart(props: any) {
             <Button variant='contained' sx={{ mr: 2 }} onClick={checkout}>
               Checkout
             </Button>
-            <Typography>{`Total: $ ${totalAmount}`}</Typography>
+            <Box component='div'>
+              <Typography component='h4' variant='h4' display='inline-block'>
+                Total:
+              </Typography>
+              <Typography component='span' display='inline-block' pl={0.5}>{`$ ${totalAmount}`}</Typography>
+            </Box>
           </Box>
         </TabPanel>
         <TabPanel value={selectedTab} index={1}>
-          <Typography component='h4' pb={2}>
+          <Typography component='h4' variant='h4' pb={2}>
             Sell for Poke Dollars
           </Typography>
           {(props.pcStorage && props.pcStorage.length > 0) || (valuables && valuables.length > 0) ? (

@@ -9,9 +9,9 @@ const Search = (props: any) => {
     searchKey = e.target.value;
     if (searchKey) {
       if (props.searchBy.indexOf('faves') > -1) {
-        props.setSearchList(() => props.favoritesList.filter((e: any) => e.name.includes(searchKey)));
+        props.setSearchList(() => props.favoritesList.filter((e: any) => e.name.includes(searchKey.toLowerCase())));
       } else {
-        props.setSearchList(() => props.pokemonList.filter((e: any) => e.name.includes(searchKey)));
+        props.setSearchList(() => props.pokemonList.filter((e: any) => e.name.includes(searchKey.toLowerCase())));
       }
     } else {
       if (props.searchBy.indexOf('faves') > -1) {
@@ -33,8 +33,8 @@ const Search = (props: any) => {
   };
 
   return (
-    <Box component='div'>
-      <Input placeholder='Search...' type='search' onChange={searchHandler} endAdornment={endAdornment()} />
+    <Box component='div' display='flex' flexGrow={1} mr={{ xs: 3, sm: 5, md: 8 }}>
+      <Input placeholder='Search...' type='search' onChange={searchHandler} endAdornment={endAdornment()} fullWidth />
     </Box>
   );
 };

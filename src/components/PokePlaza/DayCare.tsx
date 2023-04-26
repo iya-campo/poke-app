@@ -22,10 +22,16 @@ function DayCare(props: any) {
     // raise affection more if pokeblock is preferred
     if (findPokeblockPref(activePokemon.types).includes(pokeblock.name)) {
       activePokemon.affection += 2;
-      console.log(`${activePokemon.name} loved the ${pokeblock.name}!`);
+      props.setOpenAlerts({
+        isOpen: true,
+        msg: `${activePokemon.name} loved the ${pokeblock.name}!`,
+      });
     } else {
       activePokemon.affection += 1;
-      console.log(`${activePokemon.name} ate the ${pokeblock.name}!`);
+      props.setOpenAlerts({
+        isOpen: true,
+        msg: `${activePokemon.name} ate the ${pokeblock.name}!`,
+      });
     }
     // remove pokeblock from items if only one is left
     if (pokeblock.quantity === 1) {
@@ -37,13 +43,18 @@ function DayCare(props: any) {
   };
 
   const petPokemon = () => {
-    console.log(`${activePokemon.name} looks happy!`);
+    props.setOpenAlerts({
+      isOpen: true,
+      msg: `${activePokemon.name} looks happy!`,
+    });
   };
 
   return (
     <Box component='div' className={styles.dayCareModal}>
       <Box display='flex' justifyContent='space-between' pb={1}>
-        <Typography component='h2'>Day Care</Typography>
+        <Typography component='h2' variant='h2' p={0}>
+          Day Care
+        </Typography>
       </Box>
       <Divider sx={{ mb: 2 }} />
       <Box component='div' display='flex' justifyContent='space-between' flexWrap='wrap'>
@@ -80,7 +91,7 @@ function DayCare(props: any) {
               })}
             </Select>
           </FormControl>
-          <Typography component='span' textAlign='center' width='100%' pt={1} pb={1}>
+          <Typography component='h4' variant='h4' textAlign='center' pt={1} pb={1}>
             Feed Pokeblocks
           </Typography>
           <Box display='flex' justifyContent={pokeblocks.length < 3 ? 'flex-start' : 'space-between'} flexWrap='wrap'>

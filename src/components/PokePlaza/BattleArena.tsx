@@ -38,8 +38,8 @@ function BattleArena(props: any) {
   ];
 
   // team stat avg tiers
-  const HIGH_TIER = 60;
-  const LOW_TIER = 30;
+  const HIGH_TIER = 75;
+  const LOW_TIER = 40;
 
   useEffect(() => {
     let list: any = [];
@@ -87,10 +87,12 @@ function BattleArena(props: any) {
         matchWon = false;
     }
 
-    if (matchWon) {
-      receiveRewards(reward);
-      console.log(matchWon ? `You won! You received a ${reward.name}.` : 'You lost... :(');
-    }
+    receiveRewards(reward);
+
+    props.setOpenAlerts({
+      isOpen: true,
+      msg: matchWon ? `You won! You received a ${reward.name}.` : 'You lost... :(',
+    });
   };
 
   const receiveRewards = (reward: any) => {
@@ -140,7 +142,9 @@ function BattleArena(props: any) {
   return (
     <Box component='div' className={styles.battleArenaModal}>
       <Box display='flex' justifyContent='space-between' pb={1}>
-        <Typography component='h2'>Battle Arena</Typography>
+        <Typography component='h2' variant='h2' p={0}>
+          Battle Arena
+        </Typography>
         <IconButton color='primary' aria-label='shuffle trainer' component='label' sx={{ p: 0 }} onClick={shuffleTrainer}>
           <Casino />
         </IconButton>
@@ -150,7 +154,15 @@ function BattleArena(props: any) {
         <Box display='flex' flexDirection='column' flexGrow={1}>
           <Box className={styles.trainerImg} sx={{ backgroundImage: `url('/images/trainer.png')` }} />
           <Box textAlign='center' width='100%' pt={2}>
-            <Typography component='span'>{`Difficulty: ${difficulty}`}</Typography>
+            <Typography component='h4' variant='h4' display='inline-block'>{`Difficulty:`}</Typography>
+            <Typography
+              component='span'
+              display='inline-block'
+              pl={0.5}
+              sx={{ color: difficulty === 'Easy' ? '#5ad12e' : difficulty === 'Normal' ? '#ff9c00' : difficulty === 'Hard' ? '#d83527' : '#000' }}
+            >
+              {difficulty}
+            </Typography>
           </Box>
         </Box>
         <Box display='flex' alignItems='center' justifyContent='space-between' flexDirection='column' width='250px'>

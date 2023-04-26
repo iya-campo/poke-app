@@ -1,7 +1,36 @@
 import { createTheme } from "@mui/material";
 
 export const pokemonTheme = createTheme({
+    typography: {
+        // fontFamily: 'Montserrat',
+        h1: {
+            fontSize: '30px',
+            fontWeight: '600',
+        },
+        h2: {
+            fontSize: '20px',
+            fontWeight: '600',
+            padding: '1rem 0'
+        },
+        h4: {
+            fontSize: '16px',
+            fontWeight: '500',
+            color: '#000',
+            lineHeight: '1.5',
+        },
+        body1: {
+            fontWeight: '400',
+            color: '#555',
+        },
+    },
     components: {
+        MuiLink: {
+            styleOverrides: {
+                root: {
+                    fontFamily: ['Roboto', 'Helvetica'],
+                }
+            }
+        },
         MuiFormControl: {
             styleOverrides: {
                 root: {
