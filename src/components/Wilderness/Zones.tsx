@@ -20,7 +20,7 @@ function Zones(props: any) {
       case 'volcano':
         list = wildPokemons.filter((wildPokemon: any) => findMatchingTypes(['fire', 'rock', 'ground'], wildPokemon));
         props.setWildPokemons(list);
-        props.setZoneImg(`url('/images/volcano.jfif')`);
+        props.setZoneImg(`url('/images/volcano.png')`);
         break;
       default:
         console.log('Please select a zone to explore.');
