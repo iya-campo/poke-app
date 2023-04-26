@@ -141,7 +141,7 @@ function EncounterFrame(props: any) {
           affection: 0,
           hp: props.encounter.stats[0].base_stat,
           maxHp: props.encounter.stats[0].base_stat,
-          level: 0,
+          level: 1,
           currentExp: props.encounter.base_experience,
           expNeeded: props.encounter.base_experience * 2,
           stats: [
