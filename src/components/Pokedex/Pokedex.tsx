@@ -4,7 +4,7 @@ import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Search from './Search';
 import EntryCard from './EntryCard';
 import InfoSection from './InfoSection';
-import PokemonAPI from '@/pages/api/PokemonAPI';
+import PokemonAPI from '@/api/PokemonAPI';
 import { Container, Typography } from '@mui/material';
 import { FormatColorText, WaterDrop, Favorite, FilePresent } from '@mui/icons-material/';
 

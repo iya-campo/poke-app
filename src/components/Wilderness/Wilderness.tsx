@@ -4,7 +4,7 @@ import Zones from './Zones';
 import EncounterFrame from './EncounterFrame';
 import PartyLeader from './PartyLeader';
 import { Container, Box, Button, Typography } from '@mui/material';
-import { randomNumberGenerator } from 'utils/Utils';
+import { randomNumberGenerator } from '@/utils/Utils';
 
 function Wilderness(props: any) {
   const [wildPokemons, setWildPokemons]: any = useState([]);

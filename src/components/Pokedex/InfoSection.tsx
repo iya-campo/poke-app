@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
-import { capitalize, textTransform } from 'utils/Utils';
+import { capitalize, textTransform } from '@/utils/Utils';
 import Image from 'next/image';
 
 function InfoSection(props: any) {

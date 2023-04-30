@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/styles/components/BattleArena.module.scss';
 import { Box, Button, Typography, Divider, IconButton } from '@mui/material';
 import { Casino } from '@mui/icons-material';
-import { randomNumberGenerator, checkTeamStats, determineSuccess } from 'utils/Utils';
-import PokemonAPI from '@/pages/api/PokemonAPI';
+import { randomNumberGenerator, checkTeamStats, determineSuccess } from '@/utils/Utils';
+import PokemonAPI from '@/api/PokemonAPI';
 
 function BattleArena(props: any) {
   const [difficulty, setDifficulty] = useState('');

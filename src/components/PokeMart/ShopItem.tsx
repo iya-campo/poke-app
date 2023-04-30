@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 
-import { checkItems } from 'utils/Utils';
+import { checkItems } from '@/utils/Utils';
 
 function ShopItem(props: any) {
   return (

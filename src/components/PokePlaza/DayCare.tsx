@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/styles/components/DayCare.module.scss';
 import { Box, Divider, Typography, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 import { Favorite } from '@mui/icons-material';
-import { findPokeblockPref } from 'utils/Utils';
+import { findPokeblockPref } from '@/utils/Utils';
 
 function DayCare(props: any) {
   const [pokeblocks, setPokeblocks]: any = useState([]);

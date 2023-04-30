@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, ButtonGroup, Button } from '@mui/material';
-import PokemonAPI from '@/pages/api/PokemonAPI';
-import { findMatchingTypes } from 'utils/Utils';
+import PokemonAPI from '@/api/PokemonAPI';
+import { findMatchingTypes } from '@/utils/Utils';
 
 function Zones(props: any) {
   const allocWildPokemon = (zone: string, wildPokemons: any) => {

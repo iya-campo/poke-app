@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '@/styles/components/PCStorage.module.scss';
 import { Box, Button, Typography } from '@mui/material';
-import { capitalize } from 'utils/Utils';
+import { capitalize } from '@/utils/Utils';
 
 function PCStorage(props: any) {
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowDropDown } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography } from '@mui/material';
-import { capitalize, randomNumberGenerator, getTypes, checkPokemonStats, determineSuccess } from 'utils/Utils';
+import { capitalize, randomNumberGenerator, getTypes, checkPokemonStats, determineSuccess } from '@/utils/Utils';
 
 function EncounterFrame(props: any) {
   const [open, setOpen] = React.useState(false);

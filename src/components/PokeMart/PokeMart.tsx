@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/components/PokeMart.module.scss';
 import { Container, Box, Typography, Button, Tabs, Tab } from '@mui/material';
-import pokeMart from 'utils/PokeMart';
-import { checkPokemonStats, checkValuablePrice } from 'utils/Utils';
+import pokeMart from '@/data/PokeMart';
+import { checkPokemonStats, checkValuablePrice } from '@/utils/Utils';
 import ShopItem from './ShopItem';
 
 function PokeMart(props: any) {

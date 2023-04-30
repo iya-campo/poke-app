@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/styles/components/PokePlaza.module.scss';
 import { Healing, Favorite, Cancel, SportsMma, LocalFlorist } from '@mui/icons-material/';
 import { Container, Box, Button, Typography } from '@mui/material';
-import CustomModal from '../CustomModal';
+import CustomModal from '@/shared/components/CustomModal';
 import BattleArena from './BattleArena';
 import DayCare from './DayCare';
 
