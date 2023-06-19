@@ -5,6 +5,7 @@ const nextConfig = {
     domains: ['raw.githubusercontent.com'],
     loader: 'akamai',
     path: '',
+    unoptimized: true,
   },
 };
 
