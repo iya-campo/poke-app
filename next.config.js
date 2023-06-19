@@ -3,6 +3,8 @@ const nextConfig = {
   reactStrictMode: false,
   images: {
     domains: ['raw.githubusercontent.com'],
+    loader: 'akamai',
+    path: '',
   },
 };
 
