@@ -63,7 +63,7 @@ function Wilderness(props: any) {
           </Box>
         </Box>
         <Box component='div' className={styles.zoneImg} sx={zoneImg ? { backgroundImage: zoneImg } : { backgroundColor: '#ddd' }} mt={2}>
-          <Zones setZoneImg={setZoneImg} setWildPokemons={setWildPokemons}></Zones>
+          <Zones pokemonList={props.pokemonList} setZoneImg={setZoneImg} setWildPokemons={setWildPokemons}></Zones>
         </Box>
       </Box>
     </Container>

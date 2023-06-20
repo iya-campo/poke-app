@@ -62,7 +62,7 @@ export const pokemonTheme = createTheme({
         MuiTabs: {
             styleOverrides: {
                 scroller: {
-                    width: '180px'
+                    // width: '180px'
                 },
                 vertical: {
                     overflow: 'visible'

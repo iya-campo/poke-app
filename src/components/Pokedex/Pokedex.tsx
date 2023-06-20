@@ -4,11 +4,10 @@ import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Search from './Search';
 import EntryCard from './EntryCard';
 import InfoSection from './InfoSection';
-import PokemonAPI from '@/api/PokemonAPI';
 import { Container, Typography } from '@mui/material';
 import { FormatColorText, WaterDrop, Favorite, FilePresent } from '@mui/icons-material/';
 
-const Pokedex = () => {
+const Pokedex = (props: any) => {
   const [formats, setFormats]: any = useState(() => ['text']);
   let [pokemonList, setPokemonList]: any = useState([]);
   let [searchList, setSearchList]: any = useState([]);
@@ -16,21 +15,8 @@ const Pokedex = () => {
   let [favoritesList, setFavoritesList]: any = useState([]);
 
   useEffect(() => {
-    let list: any = [];
-    PokemonAPI.fetchPokemon().then((res) => {
-      res.results.map((e: any) => {
-        fetch(e.url)
-          .then((res) => res.json())
-          .then((res) => {
-            list = [...list, res];
-          })
-          .then((res) => {
-            sortList(list);
-          })
-          .catch((err) => console.log(err));
-      });
-    });
-  }, []);
+    sortList(props.pokemonList);
+  }, [props.pokemonList]);
 
   useEffect(() => {
     if (formats.indexOf('faves') > -1) {
@@ -71,11 +57,12 @@ const Pokedex = () => {
         </ToggleButtonGroup>
       </Box>
       <Box component='div' className={styles.container}>
-        <Box component='div' className={styles.listSection} mr={2}>
+        <Box component='div' className={styles.listSection}>
           {searchList.map((pokemon: any, index: number) => (
             <EntryCard
               key={index}
               pokemon={pokemon}
+              selectedPokemon={selectedPokemon}
               setSelectedPokemon={setSelectedPokemon}
               favoritesList={favoritesList}
               setFavoritesList={setFavoritesList}
@@ -83,7 +70,7 @@ const Pokedex = () => {
           ))}
         </Box>
         <Box component='div' className={styles.infoSection}>
-          <InfoSection selectedPokemon={selectedPokemon} />
+          <InfoSection selectedPokemon={selectedPokemon} isMobile={props.isMobile} />
         </Box>
       </Box>
     </Container>

@@ -1,13 +1,9 @@
-div.dayCareModal {
-  width: 450px;
-}
-
 div.pokemonImg {
-  height: 100%;
-  width: 100%;
-  background-size: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px;
+  flex-grow: 1;
 }
 
 div.pokeblock {
@@ -18,4 +14,16 @@ div.pokeblock {
 
 div.pokeblock:nth-last-child(-n + 3) {
   margin-bottom: 0;
+}
+
+@media only screen and (max-width: 475px) {
+  div.pokePanel {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  div.pokePanel,
+  div.pokeblockPanel {
+    width: 100%;
+  }
 }

@@ -42,7 +42,15 @@ function PokePlaza(props: any) {
       <CustomModal
         open={openBattleArena}
         setOpen={setOpenBattleArena}
-        component={<BattleArena playerItems={props.playerItems} setPlayerItems={props.setPlayerItems} setOpenAlerts={props.setOpenAlerts} />}
+        component={
+          <BattleArena
+            playerItems={props.playerItems}
+            setPlayerItems={props.setPlayerItems}
+            setOpenAlerts={props.setOpenAlerts}
+            pokemonList={props.pokemonList}
+            isMobile={props.isMobile}
+          />
+        }
       />
       <CustomModal
         open={openDayCare}
@@ -54,6 +62,7 @@ function PokePlaza(props: any) {
             playerItems={props.playerItems}
             setPlayerItems={props.setPlayerItems}
             setOpenAlerts={props.setOpenAlerts}
+            isMobile={props.isMobile}
           />
         }
       />

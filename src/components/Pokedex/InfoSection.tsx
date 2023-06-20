@@ -29,32 +29,39 @@ function InfoSection(props: any) {
   return (
     <Box component='div' width='100%'>
       {props.selectedPokemon?.id ? (
-        <Box component='div' display='flex' flexWrap='wrap-reverse' height='100%' overflow='auto'>
-          <Box component='div'>
-            <Box component='div' display='flex' alignItems='flex-end' mb={2}>
-              <Typography component='h2' variant='h2' aria-label='Name' py={0} pr={1}>
-                {pokemon ? capitalize(pokemon?.name) : ''}
-              </Typography>
+        <Box component='div'>
+          <Box component='div' display='flex' width='100%' mb={2}>
+            <Typography component='h2' variant='h2' aria-label='Name' display='flex' alignItems='flex-end' py={0} pr={1}>
+              {pokemon ? capitalize(pokemon?.name) : ''}
+            </Typography>
+            <Image
+              alt={`${props.selectedPokemon?.name} icon`}
+              width={50}
+              height={50}
+              src={props.selectedPokemon?.sprites.versions['generation-v']['black-white'].animated.front_default}
+            />
+          </Box>
+          <Box component='div' display='flex' flexWrap='wrap-reverse' height={'300px'} sx={{ overflowY: 'scroll' }}>
+            <Box component='div' maxWidth={310}>
+              {pokemon &&
+                Object.entries(pokemon).map(([key, value]: any, index: number) => (
+                  <Box component='div' mb={2}>
+                    <Typography key={key} component='h4' variant='h4' aria-label='Name' pr={1}>
+                      {`${key !== 'name' ? (key !== 'base_experience' ? `${capitalize(textTransform(key))}` : `${capitalize(key)}`) : ''}`}
+                      {`${key !== 'name' ? ':' : ''}`}
+                    </Typography>
+                    <Typography key={value} component='span'>{`${key !== 'name' ? value : ''}`}</Typography>
+                  </Box>
+                ))}
+            </Box>
+            <Box component='div' display='flex' justifyContent={!props.isMobile ? 'flex-end' : 'center'} alignItems='flex-start' flexGrow={1}>
               <Image
-                alt='entry pokemon icon'
-                width={50}
-                height={50}
-                src={props.selectedPokemon?.sprites.versions['generation-v']['black-white'].animated.front_default}
+                alt={`${props.selectedPokemon?.name} image`}
+                width={250}
+                height={250}
+                src={props.selectedPokemon?.sprites.other['official-artwork'].front_default}
               />
             </Box>
-            {pokemon &&
-              Object.entries(pokemon).map(([key, value]: any, index: number) => (
-                <Box key={index} component='div' display='flex' mb={0.5}>
-                  <Typography key={key} component='h4' variant='h4' aria-label='Name' pr={1}>
-                    {`${key !== 'name' ? (key !== 'base_experience' ? `${capitalize(textTransform(key))}` : `${capitalize(key)}`) : ''}`}
-                    {`${key !== 'name' ? ':' : ''}`}
-                  </Typography>
-                  <Typography key={value} component='span'>{`${key !== 'name' ? value : ''}`}</Typography>
-                </Box>
-              ))}
-          </Box>
-          <Box component='div' display='flex' justifyContent={window.innerWidth > 720 ? 'flex-end' : 'center'} alignItems='center' flexGrow={1}>
-            <Image alt='entry pokemon art' width={250} height={250} src={props.selectedPokemon?.sprites.other['official-artwork'].front_default} />
           </Box>
         </Box>
       ) : (

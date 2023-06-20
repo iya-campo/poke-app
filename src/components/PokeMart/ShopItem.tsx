@@ -6,14 +6,20 @@ import { checkItems } from '@/utils/Utils';
 function ShopItem(props: any) {
   return (
     <Box key={props.item.id} component='div' display='flex' alignItems='center' flexWrap='wrap' py={1}>
-      <Typography component='span' display='block' pr={6} width={200}>
+      <Typography component='span' display='block' width={200}>
         {props.item.name}
       </Typography>
-      <Box component='div' pr={6}>
+      <Box component='div' pr={!props.isMobile ? 6 : 2}>
         <Button variant='outlined' size='small' disabled={props.item.inCart <= 0} onClick={() => props.removeFromCart(props.item)}>
           -
         </Button>
-        <Typography component='span' display='inline-block' width='70px' textAlign='center' px={2}>
+        <Typography
+          component='span'
+          display='inline-block'
+          width={!props.isMobile ? '70px' : 'fit-content'}
+          textAlign='center'
+          px={!props.isMobile ? 2 : 1.5}
+        >
           {props.item.inCart}
         </Typography>
         <Button variant='outlined' size='small' disabled={props.item.inCart >= 99} onClick={() => props.addToCart(props.item)}>

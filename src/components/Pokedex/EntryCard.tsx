@@ -14,7 +14,11 @@ const EntryCard = (props: any) => {
 
   return (
     <Box component='div' sx={{ width: '100%' }}>
-      <Button className={styles.card} onClick={() => props.setSelectedPokemon(props.pokemon)}>
+      <Button
+        onClick={() => props.setSelectedPokemon(props.pokemon)}
+        sx={{ backgroundColor: props.selectedPokemon?.name === props.pokemon.name ? '#c9c9c9 !important' : '' }}
+        className={styles.card}
+      >
         <Typography component='span' sx={{ textAlign: 'left', flexGrow: '1' }}>
           {props.pokemon.name}
         </Typography>

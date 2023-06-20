@@ -3,6 +3,7 @@ import styles from '@/styles/components/DayCare.module.scss';
 import { Box, Divider, Typography, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 import { Favorite } from '@mui/icons-material';
 import { findPokeblockPref } from '@/utils/Utils';
+import Image from 'next/image';
 
 function DayCare(props: any) {
   const [pokeblocks, setPokeblocks]: any = useState([]);
@@ -57,9 +58,9 @@ function DayCare(props: any) {
         </Typography>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box component='div' display='flex' justifyContent='space-between' flexWrap='wrap'>
-        <Box component='div' display='flex' flexDirection='column' justifyContent='center' width='180px'>
-          <Box component='div' display='flex' justifyContent='space-between' alignItems='center' mb={2}>
+      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap'>
+        <Box component='div' display='flex' flexDirection='column' justifyContent='center' mr={2} className={styles.pokePanel}>
+          <Box component='div' display='flex' alignItems='center' mb={2}>
             <Box display='flex' flexDirection='column'>
               {[...Array(5 - Math.trunc(activePokemon?.affection / 10)).keys()].map((index: number) => (
                 <Favorite key={index} />
@@ -68,11 +69,13 @@ function DayCare(props: any) {
                 <Favorite key={index} color='primary' />
               ))}
             </Box>
-            <Box component='div' className={styles.pokemonImg} sx={{ backgroundImage: `url(${activePokemon.img})` }}></Box>
+            <Box component='div' className={styles.pokemonImg}>
+              <Image alt={`${props.selectedPokemon?.name} icon`} width={80} height={80} src={activePokemon.img} />
+            </Box>
           </Box>
           <Button variant='contained' onClick={petPokemon}>{`Pet ${activePokemon.name}`}</Button>
         </Box>
-        <Box component='div' display='flex' flexDirection='column' width='200px'>
+        <Box component='div' display='flex' flexDirection='column' className={styles.pokeblockPanel}>
           <FormControl sx={{ mb: 2 }} fullWidth>
             <InputLabel id='simple-select-label'>Active Pokemon</InputLabel>
             <Select
@@ -94,7 +97,7 @@ function DayCare(props: any) {
           <Typography component='h4' variant='h4' textAlign='center' pt={1} pb={1}>
             Feed Pokeblocks
           </Typography>
-          <Box display='flex' justifyContent={pokeblocks.length < 3 ? 'flex-start' : 'space-between'} flexWrap='wrap'>
+          <Box display='flex' justifyContent='center' flexWrap='wrap'>
             {pokeblocks.length > 0 ? (
               pokeblocks.map((pokeblock: any, index: number) => (
                 <Button
@@ -102,7 +105,7 @@ function DayCare(props: any) {
                   variant='outlined'
                   component='div'
                   className={styles.pokeblock}
-                  sx={{ mr: pokeblocks.length < 3 ? 1 : 0 }}
+                  sx={{ mx: 0.5 }}
                   onClick={() => {
                     feedPokeblock(pokeblock);
                   }}

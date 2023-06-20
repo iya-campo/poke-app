@@ -176,7 +176,14 @@ function PokeMart(props: any) {
           <Box component='div' className={styles.shopContainer}>
             {shopItems
               ? shopItems.map((item: any, index: number) => (
-                  <ShopItem key={index} playerItems={props.playerItems} item={item} addToCart={addToCart} removeFromCart={removeFromCart} />
+                  <ShopItem
+                    key={index}
+                    playerItems={props.playerItems}
+                    item={item}
+                    addToCart={addToCart}
+                    removeFromCart={removeFromCart}
+                    isMobile={props.isMobile}
+                  />
                 ))
               : 'Shop is empty.'}
           </Box>

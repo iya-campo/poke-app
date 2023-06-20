@@ -16,6 +16,7 @@ import player from '@/data/Player';
 import pokeBag from '@/data/PokeBag';
 import myTeam from '@/data/MyTeam';
 import '../styles/index.module.scss';
+import PokemonAPI from '@/api/PokemonAPI';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,8 +27,11 @@ export default function Home() {
   const [pcStorage, setPCStorage]: any = useState([]);
   const [partyLeader, setPartyLeader]: any = useState(team[0]);
 
+  const [pokemonList, setPokemonList]: any = useState([]);
   const [openAlert, setOpenAlerts]: any = useState({ isOpen: false, msg: '' });
   const [isInEncounter, setIsInEncounter]: any = useState(false);
+
+  const [isMobile, setIsMobile]: any = useState(false);
 
   useEffect(() => {
     // set initial
@@ -155,12 +159,43 @@ export default function Home() {
     ]);
   }, []);
 
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  });
+
+  const handleResize = () => {
+    if (window.innerWidth <= 767) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+  useEffect(() => {
+    let list: any = [];
+    PokemonAPI.fetchPokemon().then((res) => {
+      res.results.map((e: any) => {
+        fetch(e.url)
+          .then((res) => res.json())
+          .then((res) => {
+            list = [...list, res];
+          })
+          .then((res) => {
+            setPokemonList(list);
+          })
+          .catch((err) => console.log(err));
+      });
+    });
+  }, []);
+
   return (
     <ThemeProvider theme={pokemonTheme}>
       <GlobalHeader />
       <Alerts openAlert={openAlert} setOpenAlerts={setOpenAlerts} />
       <Greetings playerInfo={playerInfo} />
-      <Pokedex />
+      <Pokedex pokemonList={pokemonList} isMobile={isMobile} />
       <Wilderness
         team={team}
         setTeam={setTeam}
@@ -171,6 +206,7 @@ export default function Home() {
         setPartyLeader={setPartyLeader}
         setOpenAlerts={setOpenAlerts}
         setIsInEncounter={setIsInEncounter}
+        pokemonList={pokemonList}
       />
       <MyTeam
         team={team}
@@ -187,6 +223,7 @@ export default function Home() {
         setPlayerItems={setPlayerItems}
         pcStorage={pcStorage}
         setPCStorage={setPCStorage}
+        isMobile={isMobile}
       />
       <PokePlaza
         playerInfo={playerInfo}
@@ -199,6 +236,8 @@ export default function Home() {
         setPartyLeader={setPartyLeader}
         setOpenAlerts={setOpenAlerts}
         isInEncounter={isInEncounter}
+        pokemonList={pokemonList}
+        isMobile={isMobile}
       />
     </ThemeProvider>
   );

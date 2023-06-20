@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, ButtonGroup, Button } from '@mui/material';
-import PokemonAPI from '@/api/PokemonAPI';
 import { findMatchingTypes } from '@/utils/Utils';
 
 function Zones(props: any) {
@@ -29,20 +28,7 @@ function Zones(props: any) {
 
   const selectZone = (e: any) => {
     const zone: string = e.target.value;
-
-    let list: any = [];
-    PokemonAPI.fetchPokemon()
-      .then((res) => {
-        res.results.map((e: any) => {
-          fetch(e.url)
-            .then((res) => res.json())
-            .then((res) => {
-              list = [...list, res];
-              allocWildPokemon(zone, list);
-            });
-        });
-      })
-      .catch((err) => console.log(err));
+    allocWildPokemon(zone, props.pokemonList);
   };
 
   return (

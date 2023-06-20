@@ -3,11 +3,9 @@ import styles from '@/styles/components/BattleArena.module.scss';
 import { Box, Button, Typography, Divider, IconButton } from '@mui/material';
 import { Casino } from '@mui/icons-material';
 import { randomNumberGenerator, checkTeamStats, determineSuccess } from '@/utils/Utils';
-import PokemonAPI from '@/api/PokemonAPI';
 
 function BattleArena(props: any) {
   const [difficulty, setDifficulty] = useState('');
-  const [randomPokemons, setRandomPokemons] = useState([]);
   const [trainer, setTrainer] = useState({
     name: 'Miku',
     team: [],
@@ -42,24 +40,8 @@ function BattleArena(props: any) {
   const LOW_TIER = 40;
 
   useEffect(() => {
-    let list: any = [];
-    PokemonAPI.fetchPokemon()
-      .then((res) => {
-        res.results.map((e: any) => {
-          fetch(e.url)
-            .then((res) => res.json())
-            .then((res) => {
-              list = [...list, res];
-              setRandomPokemons(list);
-            });
-        });
-      })
-      .catch((err) => console.log(err));
+    shuffleTrainer();
   }, []);
-
-  useEffect(() => {
-    if (randomPokemons.length > 0) shuffleTrainer();
-  }, [randomPokemons]);
 
   const battleTrainer = () => {
     concludeBattle();
@@ -114,11 +96,11 @@ function BattleArena(props: any) {
     const randomTeam: any = [];
 
     for (let i = 0; i < randomTeamLength; i++) {
-      let randomId = randomNumberGenerator(1, randomPokemons.length);
-      randomTeam.push(randomPokemons.find((randomPokemon: any) => randomPokemon.id === randomId));
+      let randomId = randomNumberGenerator(1, props.pokemonList.length);
+      randomTeam.push(props.pokemonList.find((randomPokemon: any) => randomPokemon.id === randomId));
     }
 
-    setDifficulty(randomPokemons ? identifyDifficulty(randomTeam) : '');
+    setDifficulty(props.pokemonList ? identifyDifficulty(randomTeam) : '');
 
     setTrainer({
       name: 'Miku',
@@ -150,10 +132,10 @@ function BattleArena(props: any) {
         </IconButton>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box display='flex' flexWrap='wrap' alignItems='center'>
-        <Box display='flex' flexDirection='column' flexGrow={1}>
+      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap'>
+        <Box display='flex' flexDirection='column' mx={3} className={styles.trainerPanel}>
           <Box className={styles.trainerImg} sx={{ backgroundImage: `url('/images/trainer.png')` }} />
-          <Box textAlign='center' width='100%' pt={2}>
+          <Box textAlign='center' pt={2}>
             <Typography component='h4' variant='h4' display='inline-block'>{`Difficulty:`}</Typography>
             <Typography
               component='span'
@@ -165,7 +147,7 @@ function BattleArena(props: any) {
             </Typography>
           </Box>
         </Box>
-        <Box display='flex' alignItems='center' justifyContent='space-between' flexDirection='column' width='250px'>
+        <Box display='flex' alignItems='center' justifyContent='space-between' flexDirection='column' className={styles.battlePanel}>
           <Box component='div' display='flex' justifyContent='center' flexWrap='wrap'>
             {trainer.team.length > 0 &&
               trainer.team.map((pokemon: any, index: number) => (
