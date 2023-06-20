@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowDropDown } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography } from '@mui/material';
 import { capitalize, randomNumberGenerator, getTypes, checkPokemonStats, determineSuccess } from '@/utils/Utils';
+import styles from '@/styles/components/EncounterFrame.module.scss';
 import Image from 'next/image';
 
 function EncounterFrame(props: any) {
@@ -289,7 +290,7 @@ function EncounterFrame(props: any) {
                 : 'Your Pokemon has fainted!'}
             </Typography>
           </Box>
-          <Box component='div' display='flex' justifyContent='center' flexWrap='wrap' columnGap={2} flexGrow={1}>
+          <Box component='div' className={styles.encounterDetails}>
             <Typography component='span' display='block' textAlign='center' width={250}>
               {catchMsg ? catchMsg : `Encountered a wild ${capitalize(props.encounter?.name)}!`}
             </Typography>

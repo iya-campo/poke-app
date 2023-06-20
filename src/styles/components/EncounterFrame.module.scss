@@ -1,0 +1,16 @@
+div.encounterDetails {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  column-gap: 1;
+  height: 50px;
+}
+
+@media only screen and (max-width: 500px) {
+  div.encounterDetails {
+    align-items: flex-start;
+    height: auto;
+  }
+}
