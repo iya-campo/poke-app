@@ -132,7 +132,7 @@ function BattleArena(props: any) {
         </IconButton>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap'>
+      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap' rowGap={2}>
         <Box display='flex' flexDirection='column' mx={3} className={styles.trainerPanel}>
           <Box className={styles.trainerImg} sx={{ backgroundImage: `url('/images/trainer.png')` }} />
           <Box textAlign='center' pt={2}>
@@ -148,7 +148,7 @@ function BattleArena(props: any) {
           </Box>
         </Box>
         <Box display='flex' alignItems='center' justifyContent='space-between' flexDirection='column' className={styles.battlePanel}>
-          <Box component='div' display='flex' justifyContent='center' flexWrap='wrap'>
+          <Box component='div' display='flex' justifyContent='center' flexWrap='wrap' width={250}>
             {trainer.team.length > 0 &&
               trainer.team.map((pokemon: any, index: number) => (
                 <Box

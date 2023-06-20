@@ -2,6 +2,7 @@ div.container {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 1rem;
 }
 
 div.listSection {
@@ -10,7 +11,6 @@ div.listSection {
   align-items: center;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  margin-right: 1rem;
   height: 415px;
   flex-grow: 1;
   overflow-y: auto;
@@ -23,10 +23,4 @@ div.infoSection {
   padding: 24px;
   margin: 1rem 0;
   flex-grow: 1;
-}
-
-@media only screen and (max-width: 820px) {
-  div.listSection {
-    margin-right: 0;
-  }
 }

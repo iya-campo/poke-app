@@ -8,6 +8,10 @@ function InfoSection(props: any) {
   const [pokemon, setPokemon]: any = useState();
 
   useEffect(() => {
+    resetContainerScroll();
+  }, [pokemon]);
+
+  useEffect(() => {
     if (props.selectedPokemon) {
       setPokemon({
         name: props.selectedPokemon.name,
@@ -26,6 +30,11 @@ function InfoSection(props: any) {
     }
   }, [props.selectedPokemon]);
 
+  const resetContainerScroll = () => {
+    const element = document.getElementById('infoContainer');
+    if (element) element.scrollTop = -element?.scrollHeight;
+  };
+
   return (
     <Box component='div' width='100%'>
       {props.selectedPokemon?.id ? (
@@ -41,11 +50,11 @@ function InfoSection(props: any) {
               src={props.selectedPokemon?.sprites.versions['generation-v']['black-white'].animated.front_default}
             />
           </Box>
-          <Box component='div' display='flex' flexWrap='wrap-reverse' height={'300px'} sx={{ overflowY: 'scroll' }}>
-            <Box component='div' maxWidth={310}>
+          <Box component='div' id='infoContainer' display='flex' flexWrap='wrap-reverse' height={'300px'} sx={{ overflowY: 'auto' }}>
+            <Box component='div' display='flex' flexDirection='column' maxWidth={310} rowGap={2}>
               {pokemon &&
                 Object.entries(pokemon).map(([key, value]: any, index: number) => (
-                  <Box component='div' mb={2}>
+                  <Box component='div'>
                     <Typography key={key} component='h4' variant='h4' aria-label='Name' pr={1}>
                       {`${key !== 'name' ? (key !== 'base_experience' ? `${capitalize(textTransform(key))}` : `${capitalize(key)}`) : ''}`}
                       {`${key !== 'name' ? ':' : ''}`}

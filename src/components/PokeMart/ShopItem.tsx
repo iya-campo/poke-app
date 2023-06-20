@@ -20,7 +20,9 @@ function ShopItem(props: any) {
           textAlign='center'
           px={!props.isMobile ? 2 : 1.5}
         >
-          {props.item.inCart}
+          {props.cartItems.length > 0 && props.cartItems.find((cartItem: any) => cartItem.name === props.item.name)
+            ? props.cartItems.find((cartItem: any) => cartItem.name === props.item.name).inCart
+            : 0}
         </Typography>
         <Button variant='outlined' size='small' disabled={props.item.inCart >= 99} onClick={() => props.addToCart(props.item)}>
           +

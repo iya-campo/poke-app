@@ -58,8 +58,8 @@ function DayCare(props: any) {
         </Typography>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap'>
-        <Box component='div' display='flex' flexDirection='column' justifyContent='center' mr={2} className={styles.pokePanel}>
+      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap' gap={2}>
+        <Box component='div' display='flex' flexDirection='column' justifyContent='center' className={styles.pokePanel}>
           <Box component='div' display='flex' alignItems='center' mb={2}>
             <Box display='flex' flexDirection='column'>
               {[...Array(5 - Math.trunc(activePokemon?.affection / 10)).keys()].map((index: number) => (

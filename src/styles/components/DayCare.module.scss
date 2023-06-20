@@ -16,12 +16,7 @@ div.pokeblock:nth-last-child(-n + 3) {
   margin-bottom: 0;
 }
 
-@media only screen and (max-width: 475px) {
-  div.pokePanel {
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-
+@media only screen and (max-width: 480px) {
   div.pokePanel,
   div.pokeblockPanel {
     width: 100%;
