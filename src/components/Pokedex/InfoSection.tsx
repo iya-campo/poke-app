@@ -50,7 +50,7 @@ function InfoSection(props: any) {
               src={props.selectedPokemon?.sprites.versions['generation-v']['black-white'].animated.front_default}
             />
           </Box>
-          <Box component='div' id='infoContainer' display='flex' flexWrap='wrap-reverse' height={'300px'} sx={{ overflowY: 'auto' }}>
+          <Box component='div' id='infoContainer' display='flex' flexWrap='wrap-reverse' height={'300px'} sx={{ overflowY: 'scroll' }}>
             <Box component='div' display='flex' flexDirection='column' maxWidth={310} rowGap={2}>
               {pokemon &&
                 Object.entries(pokemon).map(([key, value]: any, index: number) => (
