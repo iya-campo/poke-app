@@ -9,10 +9,6 @@ function InfoSection(props: any) {
   const [pokemon, setPokemon]: any = useState();
 
   useEffect(() => {
-    resetContainerScroll();
-  }, [pokemon]);
-
-  useEffect(() => {
     if (props.selectedPokemon) {
       setPokemon({
         name: props.selectedPokemon.name,
@@ -29,6 +25,10 @@ function InfoSection(props: any) {
         moves: props.selectedPokemon.moves.slice(0, 5).map((move: any, index: number) => `${index !== 0 ? ' ' : ''}${textTransform(move.move.name)}`),
       });
     }
+  }, [props.selectedPokemon]);
+
+  useEffect(() => {
+    resetContainerScroll();
   }, [props.selectedPokemon]);
 
   const resetContainerScroll = () => {
