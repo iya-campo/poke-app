@@ -72,7 +72,7 @@ function PokeMart(props: any) {
       })
     ).then(() => {
       props.setPlayerInfo((prevState: any) => ({ ...prevState, pokeDollars: prevState.pokeDollars - totalAmount }));
-      shopItems.forEach((shopItem: any) => (shopItem.inCart = 0));
+      shopItems?.forEach((shopItem: any) => (shopItem.inCart = 0));
       setCartItems([]);
       setTotalAmount(0);
     });
@@ -173,7 +173,7 @@ function PokeMart(props: any) {
           <Typography component='h4' variant='h4' sx={{ mb: 2 }}>
             Purchase Supplies
           </Typography>
-          <Box component='div' className={styles.shopContainer}>
+          <Box component='div'>
             {shopItems
               ? shopItems.map((item: any, index: number) => (
                   <ShopItem

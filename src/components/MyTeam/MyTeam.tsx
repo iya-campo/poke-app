@@ -52,12 +52,12 @@ function MyTeam(props: any) {
 
     updatedTeam.map((pokemon: any) => {
       if (pokemon.order === newPosition) {
-        Object.keys(pokemon).forEach((key) => {
+        Object?.keys(pokemon).forEach((key) => {
           pokemon[key] = pokemonMovedUp[key];
         });
       }
       if (pokemon.order === oldPosition) {
-        Object.keys(pokemon).forEach((key) => {
+        Object?.keys(pokemon).forEach((key) => {
           pokemon[key] = pokemonMovedDown[key];
         });
       }
