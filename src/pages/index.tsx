@@ -204,8 +204,9 @@ export default function Home() {
         setPCStorage={setPCStorage}
         partyLeader={partyLeader}
         setPartyLeader={setPartyLeader}
-        setOpenAlerts={setOpenAlerts}
+        isInEncounter={isInEncounter}
         setIsInEncounter={setIsInEncounter}
+        setOpenAlerts={setOpenAlerts}
         pokemonList={pokemonList}
       />
       <MyTeam

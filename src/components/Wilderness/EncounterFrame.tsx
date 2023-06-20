@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowDropDown } from '@mui/icons-material';
 import { Box, Button, ButtonGroup, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography } from '@mui/material';
 import { capitalize, randomNumberGenerator, getTypes, checkPokemonStats, determineSuccess } from '@/utils/Utils';
+import Image from 'next/image';
 
 function EncounterFrame(props: any) {
   const [open, setOpen] = React.useState(false);
@@ -191,6 +192,14 @@ function EncounterFrame(props: any) {
     deductBalls();
   };
 
+  const escapeAttempt = () => {
+    const escapeMsg = 'You successfully escaped!';
+    setCatchMsg(escapeMsg);
+    setAttemptCount(0);
+    setDisableCatch(true);
+    props.setIsInEncounter(false);
+  };
+
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -201,28 +210,23 @@ function EncounterFrame(props: any) {
   };
 
   return (
-    <Box mt={2}>
+    <Box display='flex' flexGrow={1}>
       {props.encounter ? (
-        <Box component='div'>
-          <Box component='div'>
-            <Typography component='span' display='block'>
-              {catchMsg ? catchMsg : `Encountered a wild ${capitalize(props.encounter?.name)}!`}
-            </Typography>
-          </Box>
-          <Box component='div' display='flex' alignContent={'center'} mt={3}>
+        <Box component='div' display='flex' justifyContent='flex-start' flexGrow={1} columnGap={2}>
+          <Box component='div' display='flex' flexDirection='column' rowGap={1}>
             <Box component='div'>
               <ButtonGroup
                 variant='contained'
                 ref={anchorRef}
                 aria-label='split button'
-                sx={{ height: '50px' }}
+                sx={{ width: '100%' }}
                 disabled={
                   disableCatch ||
                   props.partyLeader?.hp <= 0 ||
                   !props.playerItems.some((playerItem: any) => playerItem.type === 'Ball' && playerItem.quantity !== 0)
                 }
               >
-                <Button onClick={catchAttempt} disabled={props.selectedBall?.quantity <= 0}>
+                <Button onClick={catchAttempt} disabled={props.selectedBall?.quantity <= 0} sx={{ flexGrow: 1 }}>
                   {ballOptions[selectedIndex].name}
                 </Button>
                 <Button
@@ -274,13 +278,27 @@ function EncounterFrame(props: any) {
                 )}
               </Popper>
             </Box>
-            <Typography sx={{ ml: 2, alignSelf: 'center', width: '200px' }}>
+            <Button variant='contained' disabled={!props.isInEncounter} onClick={escapeAttempt}>
+              Escape
+            </Button>
+            <Typography mt={1} textAlign='center' sx={{ alignSelf: 'center' }}>
               {props.selectedBall?.quantity > 0 && props.partyLeader?.hp > 0
                 ? ''
                 : props.partyLeader?.hp > 0
                 ? `You're out of ${props.selectedBall?.name}s!`
                 : 'Your Pokemon has fainted!'}
             </Typography>
+          </Box>
+          <Box component='div' display='flex' justifyContent='center' flexWrap='wrap' columnGap={2} flexGrow={1}>
+            <Typography component='span' display='block' textAlign='center' width={250}>
+              {catchMsg ? catchMsg : `Encountered a wild ${capitalize(props.encounter?.name)}!`}
+            </Typography>
+            <Image
+              alt={`${props.encounter?.name} icon`}
+              width={50}
+              height={50}
+              src={props.encounter?.sprites.versions['generation-v']['black-white'].animated.front_default}
+            />
           </Box>
         </Box>
       ) : (

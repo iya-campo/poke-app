@@ -8,8 +8,8 @@ function PartyLeader(props: any) {
   };
 
   return (
-    <Box component='div'>
-      <FormControl sx={{ width: '150px' }}>
+    <Box component='div' flexGrow={1}>
+      <FormControl fullWidth>
         <InputLabel id='simple-select-label'>Party Leader</InputLabel>
         <Select
           labelId='simple-select-label'

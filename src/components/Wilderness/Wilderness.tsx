@@ -5,6 +5,7 @@ import EncounterFrame from './EncounterFrame';
 import PartyLeader from './PartyLeader';
 import { Container, Box, Button, Typography } from '@mui/material';
 import { randomNumberGenerator } from '@/utils/Utils';
+import Image from 'next/image';
 
 function Wilderness(props: any) {
   const [wildPokemons, setWildPokemons]: any = useState([]);
@@ -38,8 +39,18 @@ function Wilderness(props: any) {
         <Typography component='h4' variant='h4' display='inline-block'>{`${selectedBall?.name}s Left:`}</Typography>
         <Typography component='span' display='inline-block' pl={1}>{`${selectedBall?.quantity}`}</Typography>
       </Box>
-      <Box component='div' display='flex' flexWrap='wrap' my={2}>
-        <Box component='div' mr={4}>
+      <Box component='div' display='flex' flexDirection='column' flexWrap='wrap-reverse' my={2} gap={3}>
+        <Box component='div' className={styles.zoneImg} sx={zoneImg ? { backgroundImage: zoneImg } : { backgroundColor: '#ddd' }}>
+          <Zones pokemonList={props.pokemonList} setZoneImg={setZoneImg} setWildPokemons={setWildPokemons}></Zones>
+        </Box>
+        <Box component='div' display='flex' flexWrap='wrap-reverse' rowGap={3} columnGap={5}>
+          <Box component='div' display='flex' columnGap={2} flexGrow={1}>
+            <Button variant='contained' onClick={() => exploreWilds()} sx={{ display: 'flex', flexDirection: 'column', px: 5 }}>
+              <Image alt={`${props.partyLeader?.name} icon`} width={40} height={40} src={props.partyLeader?.img} style={{ marginBottom: 10 }} />
+              Explore
+            </Button>
+            <PartyLeader team={props.team} partyLeader={props.partyLeader} setPartyLeader={props.setPartyLeader} />
+          </Box>
           <EncounterFrame
             selectedBall={selectedBall}
             setSelectedBall={setSelectedBall}
@@ -51,19 +62,11 @@ function Wilderness(props: any) {
             setPlayerItems={props.setPlayerItems}
             partyLeader={props.partyLeader}
             setPartyLeader={props.setPartyLeader}
+            isInEncounter={props.isInEncounter}
+            setIsInEncounter={props.setIsInEncounter}
             setPCStorage={props.setPCStorage}
             setOpenAlerts={props.setOpenAlerts}
-            setIsInEncounter={props.setIsInEncounter}
           />
-          <Box component='div' display='flex' mt={4}>
-            <Button variant='contained' onClick={() => exploreWilds()} sx={{ mr: 3, px: 4 }}>
-              Explore
-            </Button>
-            <PartyLeader team={props.team} partyLeader={props.partyLeader} setPartyLeader={props.setPartyLeader} />
-          </Box>
-        </Box>
-        <Box component='div' className={styles.zoneImg} sx={zoneImg ? { backgroundImage: zoneImg } : { backgroundColor: '#ddd' }} mt={2}>
-          <Zones pokemonList={props.pokemonList} setZoneImg={setZoneImg} setWildPokemons={setWildPokemons}></Zones>
         </Box>
       </Box>
     </Container>
