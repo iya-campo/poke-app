@@ -1,0 +1,7 @@
+div.infoContainer {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  height: 300px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}

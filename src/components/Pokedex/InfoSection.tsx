@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { capitalize, textTransform } from '@/utils/Utils';
 import Image from 'next/image';
+import styles from '../../styles/components/InfoSection.module.scss';
 
 function InfoSection(props: any) {
   const statNames = ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'];
@@ -50,7 +51,7 @@ function InfoSection(props: any) {
               src={props.selectedPokemon?.sprites.versions['generation-v']['black-white'].animated.front_default}
             />
           </Box>
-          <Box component='div' id='infoContainer' display='flex' flexWrap='wrap-reverse' height={'300px'} sx={{ overflowY: 'scroll' }}>
+          <Box component='div' id='infoContainer' className={styles.infoContainer}>
             <Box component='div' display='flex' flexDirection='column' maxWidth={310} rowGap={2}>
               {pokemon &&
                 Object.entries(pokemon).map(([key, value]: any, index: number) => (
