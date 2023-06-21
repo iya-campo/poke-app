@@ -1,26 +1,37 @@
-import React, { useState } from 'react';
+import React, { Dispatch, MouseEvent, ReactElement, SetStateAction, useContext, useState } from 'react';
 import styles from '@/styles/components/MyTeam.module.scss';
 import { MoreVert, ArrowUpward, ArrowDownward, Computer } from '@mui/icons-material/';
-import { Container, Box, Typography, Menu, IconButton, MenuItem, Button, ListItemIcon, ListItemText } from '@mui/material';
+import { Container, Box, Typography, Menu, IconButton, MenuItem, Button, ListItemIcon, ListItemText, SvgIconTypeMap } from '@mui/material';
 import PCStorage from './PCStorage';
 import Image from 'next/image';
+import { IPokemon } from '@/types/PokeApp';
+import PokeAppContext from '@/contexts/PokeAppContext';
 
-function MyTeam(props: any) {
-  const [anchorEl, setAnchorEl]: any = React.useState<null | HTMLElement>(null);
-  const [selectedPokemon, setSelectedPokemon]: any = useState({});
-  const open = Boolean(anchorEl);
-  const partyOptions = ['Move Up', 'Move Down', 'Store in PC'];
-  const partyOptionsIcons = [<ArrowUpward />, <ArrowDownward />, <Computer />];
+interface IMyTeamContext {
+  team: IPokemon[];
+  setTeam: Dispatch<SetStateAction<IPokemon[]>>;
+  pcStorage: IPokemon[];
+  setPCStorage: Dispatch<SetStateAction<IPokemon[]>>;
+  partyLeader: IPokemon;
+  setPartyLeader: Dispatch<SetStateAction<IPokemon>>;
+}
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+function MyTeam() {
+  const { team, setTeam, pcStorage, setPCStorage, partyLeader, setPartyLeader }: IMyTeamContext = useContext(PokeAppContext);
 
-  const handleClose = (e: any) => {
-    setAnchorEl(null);
-  };
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [selectedPokemon, setSelectedPokemon] = useState<IPokemon>();
 
-  const handleMenuAction = (e: any, optionIndex: number) => {
+  const partyOptions: string[] = ['Move Up', 'Move Down', 'Store in PC'];
+  const partyOptionsIcons: ReactElement[] = [<ArrowUpward />, <ArrowDownward />, <Computer />];
+
+  const open: boolean = Boolean(anchorEl);
+
+  const handleClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+
+  const handleClose = () => setAnchorEl(null);
+
+  const handleMenuAction = (optionIndex: number) => {
     switch (optionIndex) {
       case 0:
         movePokemon('up');
@@ -38,21 +49,21 @@ function MyTeam(props: any) {
   };
 
   const movePokemon = (position: string) => {
-    if ((position === 'up' && selectedPokemon.order === 0) || (position === 'down' && selectedPokemon.order === props.team.length - 1)) return;
+    if ((position === 'up' && selectedPokemon.order === 0) || (position === 'down' && selectedPokemon.order === team.length - 1)) return;
 
-    const oldPosition = selectedPokemon.order;
-    const newPosition = position === 'up' ? selectedPokemon.order - 1 : selectedPokemon.order + 1;
+    const oldPosition: number = selectedPokemon.order;
+    const newPosition: number = position === 'up' ? selectedPokemon.order - 1 : selectedPokemon.order + 1;
 
-    let pokemonMovedUp = props.team.find((movedPokemon: any) => movedPokemon.order === oldPosition);
+    let pokemonMovedUp: any = team.find((movedPokemon: IPokemon) => movedPokemon.order === oldPosition);
     pokemonMovedUp = { ...pokemonMovedUp, order: newPosition };
-    let pokemonMovedDown = props.team.find((movedPokemon: any) => movedPokemon.order === newPosition);
+    let pokemonMovedDown: any = team.find((movedPokemon: IPokemon) => movedPokemon.order === newPosition);
     pokemonMovedDown = { ...pokemonMovedDown, order: oldPosition };
 
-    const updatedTeam = props.team;
+    const updatedTeam: IPokemon[] = team;
 
     updatedTeam.map((pokemon: any) => {
       if (pokemon.order === newPosition) {
-        Object?.keys(pokemon).forEach((key) => {
+        Object?.keys(pokemon).forEach((key: string) => {
           pokemon[key] = pokemonMovedUp[key];
         });
       }
@@ -63,33 +74,33 @@ function MyTeam(props: any) {
       }
     });
 
-    props.setTeam([...updatedTeam]);
-    props.setPartyLeader((prevState: any) => props.team[prevState.order]);
+    setTeam([...updatedTeam]);
+    setPartyLeader((prevState: IPokemon) => team[prevState.order]);
   };
 
   const depositPokemon = () => {
-    if (props.team.length > 1) {
+    if (team.length > 1) {
       // store first pokemon found into pc storage
-      const storedPokemon = props.team.find((pokemon: any) => pokemon.id === selectedPokemon?.id);
-      props.setPCStorage((prevState: any) => [storedPokemon, ...prevState]);
+      const storedPokemon: IPokemon = team.find((pokemon: IPokemon) => pokemon.id === selectedPokemon?.id);
+      setPCStorage((prevState: IPokemon[]) => [storedPokemon, ...prevState]);
 
       // remove stored pokemon and reorder party
-      const updatedTeam = props.team.toSpliced(selectedPokemon?.order, 1);
-      updatedTeam.map((pokemon: any, index: number) => {
+      const updatedTeam: IPokemon[] = team.filter((pokemon: IPokemon) => pokemon.order !== selectedPokemon?.order);
+      updatedTeam.map((pokemon: IPokemon, index: number) => {
         pokemon.order = index;
       });
-      props.setTeam([...updatedTeam]);
+      setTeam([...updatedTeam]);
 
-      if (props.partyLeader.order === 0) {
+      if (partyLeader.order === 0) {
         // if the stored pokemon is first in order
         // set updated team's first pokemon as party leader
-        props.setPartyLeader(updatedTeam[0]);
+        setPartyLeader(updatedTeam[0]);
         return;
       }
-      if (props.partyLeader.order === storedPokemon.order) {
+      if (partyLeader.order === storedPokemon.order) {
         // if the stored pokemon isn't first in order
         // set pokemon before the stored one as party leader
-        props.setPartyLeader(props.team[storedPokemon.order - 1]);
+        setPartyLeader(team[storedPokemon.order - 1]);
         return;
       }
     } else {
@@ -97,17 +108,17 @@ function MyTeam(props: any) {
     }
   };
 
-  const withdrawPokemon = (pokemon: any) => {
-    if (props.team.length < 6) {
-      let updatedTeam: any = [];
+  const withdrawPokemon = (pokemon: IPokemon) => {
+    if (team.length < 6) {
+      let updatedTeam: IPokemon[] = [];
 
       // withdraw pokemon and match object keys
-      props.setTeam((prevState: any) => {
+      setTeam((prevState: IPokemon[]) => {
         updatedTeam = [
           ...prevState,
           {
             id: pokemon.id,
-            order: props.team.length,
+            order: team.length,
             name: pokemon.name,
             types: pokemon.types,
             affection: pokemon.affection,
@@ -124,7 +135,7 @@ function MyTeam(props: any) {
       });
 
       // remove withdrawn pokemon from PC storage
-      props.setPCStorage(props.pcStorage.toSpliced(props.pcStorage.indexOf(pokemon), 1));
+      setPCStorage(pcStorage.filter((_, index: number) => index !== pcStorage.indexOf(pokemon)));
     } else {
       // alert: your party is full
     }
@@ -136,13 +147,9 @@ function MyTeam(props: any) {
         My Team
       </Typography>
       <Box component='div' display='flex' flexWrap='wrap' my={2}>
-        <Box component='div' className={styles.partyList} width={props.team.length > 3 ? '390px' : '195px'}>
-          {props.team?.map((pokemon: any, teamIndex: number) => (
-            <Box
-              key={teamIndex}
-              className={styles.partyPokemon}
-              sx={{ backgroundColor: props.partyLeader?.order === pokemon.order ? '#bbb' : '#ddd' }}
-            >
+        <Box component='div' className={styles.partyList} width={team.length > 3 ? '390px' : '195px'}>
+          {team?.map((pokemon: IPokemon, teamIndex: number) => (
+            <Box key={teamIndex} className={styles.partyPokemon} sx={{ backgroundColor: partyLeader?.order === pokemon.order ? '#bbb' : '#ddd' }}>
               <Box component='div' display='flex' justifyContent='flex-start' alignItems='center'>
                 <Image alt='party pokemon' width={30} height={30} src={pokemon.img}></Image>
                 <Typography component='span' pl={2}>
@@ -155,8 +162,8 @@ function MyTeam(props: any) {
                 aria-controls={open ? 'long-menu' : undefined}
                 aria-expanded={open ? 'true' : undefined}
                 aria-haspopup='true'
-                onClick={(e: any) => {
-                  handleClick(e);
+                onClick={(event: MouseEvent<HTMLElement>) => {
+                  handleClick(event);
                   setSelectedPokemon(pokemon);
                 }}
                 sx={{ px: 0 }}
@@ -178,12 +185,12 @@ function MyTeam(props: any) {
                   'aria-labelledby': 'long-button',
                 }}
               >
-                {partyOptions.map((option: any, optionIndex: number) => (
+                {partyOptions.map((option: string, optionIndex: number) => (
                   <MenuItem
                     key={optionIndex}
                     value={optionIndex}
-                    onClick={(e: any) => {
-                      handleMenuAction(e, optionIndex);
+                    onClick={() => {
+                      handleMenuAction(optionIndex);
                     }}
                   >
                     <ListItemIcon>{partyOptionsIcons[optionIndex]}</ListItemIcon>
@@ -194,7 +201,7 @@ function MyTeam(props: any) {
             </Box>
           ))}
         </Box>
-        <PCStorage pcStorage={props.pcStorage} withdrawPokemon={withdrawPokemon} />
+        <PCStorage withdrawPokemon={withdrawPokemon} />
       </Box>
     </Container>
   );

@@ -1,30 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, useContext, MouseEvent, SyntheticEvent } from 'react';
 import styles from '@/styles/components/PokeMart.module.scss';
 import { Container, Box, Typography, Button, Tabs, Tab } from '@mui/material';
 import pokeMart from '@/data/PokeMart';
 import { checkPokemonStats, checkValuablePrice } from '@/utils/Utils';
 import ShopItem from './ShopItem';
+import { ICartItem, IItem, IPlayer, IPokemon, IPokemonStats } from '@/types/PokeApp';
+import PokeAppContext from '@/contexts/PokeAppContext';
 
-function PokeMart(props: any) {
-  const [totalAmount, setTotalAmount]: any = useState(0);
-  const [valuables, setValuables]: any = useState([]);
-  const [shopItems, setShopItems]: any = useState([]);
-  const [cartItems, setCartItems]: any = useState([]);
-  const [selectedTab, setSelectedTab]: any = useState(0);
+interface IPokeMartContext {
+  playerInfo: IPlayer;
+  setPlayerInfo: Dispatch<SetStateAction<IPlayer>>;
+  playerItems: IItem[];
+  setPlayerItems: Dispatch<SetStateAction<IItem[]>>;
+  pcStorage: IPokemon[];
+  setPCStorage: Dispatch<SetStateAction<IPokemon[]>>;
+  isMobile: boolean;
+}
+
+function PokeMart() {
+  const { playerInfo, setPlayerInfo, playerItems, setPlayerItems, pcStorage, setPCStorage, isMobile }: IPokeMartContext = useContext(PokeAppContext);
+
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [valuables, setValuables] = useState<IItem[]>([]);
+  const [shopItems, setShopItems] = useState<ICartItem[]>([]);
+  const [cartItems, setCartItems] = useState<ICartItem[]>([]);
+  const [selectedTab, setSelectedTab] = useState<number>(0);
 
   // pokemon stat avg tiers
-  const HIGH_TIER = 75;
-  const LOW_TIER = 40;
+  const HIGH_TIER: number = 75;
+  const LOW_TIER: number = 40;
 
   useEffect(() => {
     setShopItems(pokeMart);
-    setValuables(props.playerItems.filter((playerItem: any) => playerItem.type === 'Valuable'));
-  }, [props.playerItems]);
+    setValuables(playerItems.filter((playerItem: IItem) => playerItem.type === 'Valuable'));
+  }, [playerItems]);
 
-  const addToCart = (item: any) => {
+  const addToCart = (item: ICartItem) => {
     if (item.inCart >= 99) return;
     if (!cartItems || !cartItems.includes(item)) {
-      setCartItems((prevState: any) => {
+      setCartItems((prevState: ICartItem[]) => {
         item.inCart += 1;
         const addedItem = [...prevState, item];
         return addedItem;
@@ -32,71 +46,71 @@ function PokeMart(props: any) {
     } else {
       item.inCart += 1;
     }
-    setTotalAmount((prevState: any) => prevState + item.price);
+    setTotalAmount((prevState: number) => prevState + item.price);
   };
 
-  const removeFromCart = (item: any) => {
+  const removeFromCart = (item: ICartItem) => {
     if (item.inCart <= 0) return;
     if (!cartItems && item.inCart > 1) {
-      setCartItems((prevState: any) => {
+      setCartItems((prevState: ICartItem[]) => {
         item.inCart -= 1;
-        const removedItem = cartItems.filter((cartItem: any) => cartItem.id !== item.id);
+        const removedItem = cartItems.filter((cartItem: ICartItem) => cartItem.id !== item.id);
         return removedItem;
       });
     } else {
       item.inCart -= 1;
     }
-    setTotalAmount((prevState: any) => prevState - item.price);
+    setTotalAmount((prevState: number) => prevState - item.price);
   };
 
   const checkout = () => {
-    if (totalAmount > props.playerInfo.pokeDollars) return;
-    const itemOwned = cartItems.filter((cartItem: any) => props.playerItems.some((playerItem: any) => playerItem.id === cartItem.id));
+    if (totalAmount > playerInfo.pokeDollars) return;
+    const itemOwned = cartItems.filter((cartItem: ICartItem) => playerItems.some((playerItem: IItem) => playerItem.id === cartItem.id));
     Promise.all(
-      cartItems.map((cartItem: any) => {
+      cartItems.map((cartItem: ICartItem) => {
         if (!itemOwned.includes(cartItem)) {
           // if cart item isn't owned by player yet
-          props.setPlayerItems((prevState: any) => [
+          setPlayerItems((prevState: IItem[]) => [
             ...prevState,
-            { id: cartItem.id, name: cartItem.name, type: cartItem.type, quantity: cartItem.inCart, icon: cartItem.icon },
+            { id: cartItem.id, name: cartItem.name, type: cartItem.type, qty: cartItem.inCart, icon: cartItem.icon },
           ]);
         } else {
           // if owned by player, go through player items
           // look for cart item bought and inc quantity
-          props.playerItems.map((playerItem: any) => {
+          playerItems.map((playerItem: IItem) => {
             if (playerItem.name.indexOf(cartItem.name) == 0) {
-              playerItem.quantity += cartItem.inCart;
+              playerItem.qty += cartItem.inCart;
             }
           });
         }
       })
     ).then(() => {
-      props.setPlayerInfo((prevState: any) => ({ ...prevState, pokeDollars: prevState.pokeDollars - totalAmount }));
-      shopItems?.forEach((shopItem: any) => (shopItem.inCart = 0));
+      setPlayerInfo((prevState: IPlayer) => ({ ...prevState, pokeDollars: prevState.pokeDollars - totalAmount }));
+      shopItems?.forEach((shopItem: ICartItem) => (shopItem.inCart = 0));
       setCartItems([]);
       setTotalAmount(0);
     });
   };
 
-  const sell = (itemType: string, sellable: any) => {
+  const sell = (itemType: string, sellable: IItem | IPokemon) => {
     let sellPrice: number = 0;
 
     switch (itemType) {
       case 'pokemon':
-        sellPrice = checkPokemonPrice(sellable.stats);
-        props.setPCStorage(props.pcStorage.toSpliced(props.pcStorage.indexOf(sellable), 1));
+        sellPrice = checkPokemonPrice((sellable as IPokemon).stats);
+        setPCStorage(pcStorage.filter((_, index: number) => index !== pcStorage.indexOf(sellable as IPokemon)));
         break;
       case 'valuable':
-        sellPrice = checkValuablePrice(sellable.name) * sellable?.quantity;
-        props.setPlayerItems(props.playerItems.filter((valuableToSell: any) => valuableToSell.id !== sellable.id));
+        sellPrice = checkValuablePrice(sellable.name) * (sellable as IItem).qty;
+        setPlayerItems(playerItems.filter((valuableToSell: IItem) => valuableToSell.id !== sellable.id));
         break;
       default:
       //
     }
-    props.setPlayerInfo((prevState: any) => ({ ...prevState, pokeDollars: prevState.pokeDollars + sellPrice }));
+    setPlayerInfo((prevState: IPlayer) => ({ ...prevState, pokeDollars: prevState.pokeDollars + sellPrice }));
   };
 
-  const checkPokemonPrice = (pokemonStats: any) => {
+  const checkPokemonPrice = (pokemonStats: IPokemonStats[]) => {
     if (checkPokemonStats(pokemonStats) >= HIGH_TIER) {
       return 300;
     }
@@ -152,7 +166,7 @@ function PokeMart(props: any) {
         <Typography component='h4' variant='h4' display='inline-block' pt={2}>
           Poke Dollars:
         </Typography>
-        <Typography component='span' display='inline-block' pl={0.5}>{`$ ${props.playerInfo.pokeDollars}`}</Typography>
+        <Typography component='span' display='inline-block' pl={0.5}>{`$ ${playerInfo.pokeDollars}`}</Typography>
       </Box>
 
       <Box component='div' sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', my: 2 }}>
@@ -160,7 +174,7 @@ function PokeMart(props: any) {
           orientation='vertical'
           variant='scrollable'
           value={selectedTab}
-          onChange={(e: any, tab: number) => {
+          onChange={(event: SyntheticEvent<Element, Event>, tab: number) => {
             setSelectedTab(tab);
           }}
           aria-label='Vertical tabs example'
@@ -175,15 +189,8 @@ function PokeMart(props: any) {
           </Typography>
           <Box component='div'>
             {shopItems
-              ? shopItems.map((item: any, index: number) => (
-                  <ShopItem
-                    key={index}
-                    playerItems={props.playerItems}
-                    item={item}
-                    addToCart={addToCart}
-                    removeFromCart={removeFromCart}
-                    isMobile={props.isMobile}
-                  />
+              ? shopItems.map((item: ICartItem, index: number) => (
+                  <ShopItem key={index} item={item} addToCart={addToCart} removeFromCart={removeFromCart} />
                 ))
               : 'Shop is empty.'}
           </Box>
@@ -203,16 +210,16 @@ function PokeMart(props: any) {
           <Typography component='h4' variant='h4' pb={2}>
             Sell for Poke Dollars
           </Typography>
-          {(props.pcStorage && props.pcStorage.length > 0) || (valuables && valuables.length > 0) ? (
+          {(pcStorage && pcStorage.length > 0) || (valuables && valuables.length > 0) ? (
             <Box component='div' display='flex' sx={{ maxHeight: '240px', flexWrap: 'wrap', overflowY: 'auto' }}>
-              {props.pcStorage.map((pokemon: any, index: number) => (
+              {pcStorage.map((pokemon: IPokemon, index: number) => (
                 <Button key={index} variant='outlined' sx={{ mr: 1, mb: 1 }} onClick={() => sell('pokemon', pokemon)} className={styles.sellItem}>
                   {pokemon?.name} - {`$ ${checkPokemonPrice(pokemon.stats)}`}
                 </Button>
               ))}
-              {valuables.map((valuable: any, index: number) => (
+              {valuables.map((valuable: IItem, index: number) => (
                 <Button key={index} variant='outlined' sx={{ mr: 1, mb: 1 }} onClick={() => sell('valuable', valuable)} className={styles.sellItem}>
-                  {`${valuable?.name} ×${valuable?.quantity}`} - {`$ ${checkValuablePrice(valuable.name) * valuable?.quantity}`}
+                  {`${valuable?.name} ×${valuable?.qty}`} - {`$ ${checkValuablePrice(valuable.name) * valuable?.qty}`}
                 </Button>
               ))}
             </Box>

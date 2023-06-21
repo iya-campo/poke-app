@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Box, Input, InputAdornment } from '@mui/material';
 import { Close } from '@mui/icons-material/';
+import { IPokemonData } from '@/types/PokeApp';
 
-const Search = (props: any) => {
-  let searchKey = '';
+interface ISearchProps {
+  resultList: IPokemonData[];
+  favoritesList: IPokemonData[];
+  searchBy: string[];
+  setSearchList: Dispatch<SetStateAction<IPokemonData[]>>;
+}
 
-  const searchHandler = (e: any) => {
+const Search = ({ resultList, favoritesList, searchBy, setSearchList }: ISearchProps) => {
+  let searchKey: string = '';
+
+  const searchHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     searchKey = e.target.value;
     if (searchKey) {
-      if (props.searchBy.indexOf('faves') > -1) {
-        props.setSearchList(() => props.favoritesList.filter((e: any) => e.name.includes(searchKey.toLowerCase())));
+      if (searchBy.indexOf('faves') > -1) {
+        setSearchList(() => favoritesList.filter((favorite: IPokemonData) => favorite.name.includes(searchKey.toLowerCase())));
       } else {
-        props.setSearchList(() => props.pokemonList.filter((e: any) => e.name.includes(searchKey.toLowerCase())));
+        setSearchList(() => resultList.filter((result: IPokemonData) => result.name.includes(searchKey.toLowerCase())));
       }
     } else {
-      if (props.searchBy.indexOf('faves') > -1) {
-        props.setSearchList(props.favoritesList);
+      if (searchBy.indexOf('faves') > -1) {
+        setSearchList(favoritesList);
       } else {
-        props.setSearchList(props.pokemonList);
+        setSearchList(resultList);
       }
     }
   };

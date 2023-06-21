@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from '@/styles/components/PCStorage.module.scss';
 import { Box, Button, Typography } from '@mui/material';
 import { capitalize } from '@/utils/Utils';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemon } from '@/types/PokeApp';
 
-function PCStorage(props: any) {
+interface IPCStorageProps {
+  withdrawPokemon: (pokemon: IPokemon) => void;
+}
+
+function PCStorage({ withdrawPokemon }: IPCStorageProps) {
+  const { pcStorage }: { pcStorage: IPokemon[] } = useContext(PokeAppContext);
+
   return (
     <Box component='div' className={styles.pcStorage}>
       <Typography component='h4' variant='h4' pb={2}>
         PC Storage
       </Typography>
-      {props.pcStorage && props.pcStorage.length > 0 ? (
+      {pcStorage && pcStorage.length > 0 ? (
         <Box component='div' display='flex' sx={{ maxHeight: '300px', flexWrap: 'wrap', overflowY: 'auto' }}>
-          {props.pcStorage.map((pokemon: any, index: number) => (
-            <Button key={index} variant='outlined' className={styles.storagePokemon} onClick={() => props.withdrawPokemon(pokemon)}>
+          {pcStorage.map((pokemon: IPokemon, index: number) => (
+            <Button key={index} variant='outlined' className={styles.storagePokemon} onClick={() => withdrawPokemon(pokemon)}>
               {capitalize(pokemon?.name)}
             </Button>
           ))}

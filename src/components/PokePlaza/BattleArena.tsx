@@ -1,43 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction, useContext } from 'react';
 import styles from '@/styles/components/BattleArena.module.scss';
 import { Box, Button, Typography, Divider, IconButton } from '@mui/material';
 import { Casino } from '@mui/icons-material';
 import { randomNumberGenerator, checkTeamStats, determineSuccess } from '@/utils/Utils';
+import { IAlerts, IItem, IPokemon, IPokemonData } from '@/types/PokeApp';
+import PokeAppContext from '@/contexts/PokeAppContext';
 
-function BattleArena(props: any) {
-  const [difficulty, setDifficulty] = useState('');
-  const [trainer, setTrainer] = useState({
-    name: 'Miku',
-    team: [],
-  });
+interface IBattleArenaContext {
+  pokemonList: any;
+  setOpenAlerts: Dispatch<SetStateAction<IAlerts>>;
+  playerItems: IItem[];
+  setPlayerItems: Dispatch<SetStateAction<IItem[]>>;
+  isMobile: boolean;
+}
 
-  const REWARDS_LIST = [
+function BattleArena() {
+  const { pokemonList, setOpenAlerts, playerItems, setPlayerItems, isMobile }: IBattleArenaContext = useContext(PokeAppContext);
+
+  const [difficulty, setDifficulty] = useState<string>('');
+  const [trainer, setTrainer] = useState<{ name: string; team: IPokemonData[] }>();
+
+  const REWARDS_LIST: IItem[] = [
     {
       id: 4,
       name: 'Stardust',
       type: 'Valuable',
-      quantity: 1,
+      qty: 1,
       icon: '',
     },
     {
       id: 5,
       name: 'Nugget',
       type: 'Valuable',
-      quantity: 1,
+      qty: 1,
       icon: '',
     },
     {
       id: 6,
       name: 'Comet Shard',
       type: 'Valuable',
-      quantity: 1,
+      qty: 1,
       icon: '',
     },
   ];
 
   // team stat avg tiers
-  const HIGH_TIER = 75;
-  const LOW_TIER = 40;
+  const HIGH_TIER: number = 75;
+  const LOW_TIER: number = 40;
 
   useEffect(() => {
     shuffleTrainer();
@@ -50,7 +59,7 @@ function BattleArena(props: any) {
 
   const concludeBattle = () => {
     let matchWon: boolean = false;
-    let reward: any = {};
+    let reward: IItem;
 
     switch (difficulty) {
       case 'Easy':
@@ -69,38 +78,38 @@ function BattleArena(props: any) {
         matchWon = false;
     }
 
-    receiveRewards(reward);
+    if (matchWon) receiveRewards(reward);
 
-    props.setOpenAlerts({
+    setOpenAlerts({
       isOpen: true,
       msg: matchWon ? `You won! You received a ${reward.name}.` : 'You lost... :(',
     });
   };
 
-  const receiveRewards = (reward: any) => {
-    const existingValuable = props.playerItems?.find((playerItem: any) => playerItem.id === reward.id);
+  const receiveRewards = (reward: IItem) => {
+    const existingValuable = playerItems?.find((playerItem: IItem) => playerItem.id === reward.id);
 
     if (existingValuable) {
-      props.playerItems.map((playerItem: any) => {
+      playerItems.map((playerItem: IItem) => {
         if (playerItem.id === existingValuable.id) {
-          playerItem.quantity += 1;
+          playerItem.qty += 1;
         }
       });
     } else {
-      props.setPlayerItems((prevState: any) => [...prevState, reward]);
+      setPlayerItems((prevState: IItem[]) => [...prevState, reward]);
     }
   };
 
   const shuffleTrainer = () => {
     const randomTeamLength: number = randomNumberGenerator(1, 6);
-    const randomTeam: any = [];
+    const randomTeam: IPokemonData[] = [];
 
     for (let i = 0; i < randomTeamLength; i++) {
-      let randomId = randomNumberGenerator(1, props.pokemonList.length);
-      randomTeam.push(props.pokemonList.find((randomPokemon: any) => randomPokemon.id === randomId));
+      let randomId = randomNumberGenerator(1, pokemonList.length);
+      randomTeam.push(pokemonList.find((randomPokemon: IPokemon) => randomPokemon.id === randomId));
     }
 
-    setDifficulty(props.pokemonList ? identifyDifficulty(randomTeam) : '');
+    setDifficulty(pokemonList ? identifyDifficulty(randomTeam) : '');
 
     setTrainer({
       name: 'Miku',
@@ -108,7 +117,7 @@ function BattleArena(props: any) {
     });
   };
 
-  const identifyDifficulty = (team: any) => {
+  const identifyDifficulty = (team: IPokemonData[]) => {
     if (checkTeamStats(team) >= HIGH_TIER) {
       return 'Hard';
     }
@@ -132,7 +141,7 @@ function BattleArena(props: any) {
         </IconButton>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap' rowGap={2}>
+      <Box component='div' display='flex' justifyContent={!isMobile ? 'space-between' : 'center'} flexWrap='wrap' rowGap={2}>
         <Box display='flex' flexDirection='column' mx={3} className={styles.trainerPanel}>
           <Box className={styles.trainerImg} sx={{ backgroundImage: `url('/images/trainer.png')` }} />
           <Box textAlign='center' pt={2}>
@@ -149,8 +158,8 @@ function BattleArena(props: any) {
         </Box>
         <Box display='flex' alignItems='center' justifyContent='space-between' flexDirection='column' className={styles.battlePanel}>
           <Box component='div' display='flex' justifyContent='center' flexWrap='wrap' width={250}>
-            {trainer.team.length > 0 &&
-              trainer.team.map((pokemon: any, index: number) => (
+            {trainer?.team.length > 0 &&
+              trainer.team.map((pokemon: IPokemonData, index: number) => (
                 <Box
                   key={index}
                   component='div'
@@ -163,7 +172,7 @@ function BattleArena(props: any) {
           </Box>
           <Box component='div' display='flex' flexDirection='column' pt={2}>
             <Typography component='h4' textAlign='center' pb={2}>
-              Trainer {trainer.name} wants to battle!
+              Trainer {trainer?.name} wants to battle!
             </Typography>
             <Button variant='contained' onClick={battleTrainer} fullWidth>
               Battle

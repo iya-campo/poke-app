@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import styles from '@/styles/components/CustomModal.module.scss';
 import { Modal, Box } from '@mui/material';
 
-function CustomModal(props: any) {
-  const handleClose = () => props.setOpen(false);
+interface ICustomModalProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  component: ReactNode;
+}
+
+function CustomModal({ open, setOpen, component }: ICustomModalProps) {
+  const handleClose = () => setOpen(false);
 
   return (
-    <Modal open={props.open} onClose={handleClose} aria-labelledby='modal-title' aria-describedby='modal-description'>
+    <Modal open={open} onClose={handleClose} aria-labelledby='modal-title' aria-describedby='modal-description'>
       <Box component='div' className={styles.modalContainer} display='flex'>
         <Box component='div' className={styles.modalContent}>
-          {props.component}
+          {component}
         </Box>
       </Box>
     </Modal>

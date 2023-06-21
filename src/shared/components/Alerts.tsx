@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
 import { Alert, Collapse, Container, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IAlerts } from '@/types/PokeApp';
 
-function Alerts(props: any) {
+interface IAlertsProps {
+  openAlert: IAlerts;
+}
+
+function Alerts({ openAlert }: IAlertsProps) {
+  const { setOpenAlerts }: { setOpenAlerts: Dispatch<SetStateAction<IAlerts>> } = useContext(PokeAppContext);
+
   return (
     <Container sx={{ position: 'fixed', top: 10, left: 0, right: 0, zIndex: 9999 }}>
       <Collapse
-        in={props.openAlert.isOpen}
+        in={openAlert.isOpen}
         timeout='auto'
         addEndListener={() => {
-          const timeId = setTimeout(() => {
+          const timeId: NodeJS.Timeout = setTimeout<[]>(() => {
             // After 3 seconds close the alert
-            props.setOpenAlerts((prevState: any) => ({ ...prevState, isOpen: false }));
+            setOpenAlerts((prevState: IAlerts) => ({ ...prevState, isOpen: false }));
           }, 3000);
           return () => {
             clearTimeout(timeId);
@@ -26,7 +34,7 @@ function Alerts(props: any) {
               color='inherit'
               size='small'
               onClick={() => {
-                props.setOpenAlerts((prevState: any) => ({ ...prevState, isOpen: false }));
+                setOpenAlerts((prevState: IAlerts) => ({ ...prevState, isOpen: false }));
               }}
             >
               <Close fontSize='inherit' />
@@ -34,7 +42,7 @@ function Alerts(props: any) {
           }
           sx={{ my: 2, py: 1 }}
         >
-          {props.openAlert.msg}
+          {openAlert.msg}
         </Alert>
       </Collapse>
     </Container>

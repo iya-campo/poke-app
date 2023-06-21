@@ -1,40 +1,42 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, ChangeEvent, MouseEvent } from 'react';
 import styles from '@/styles/components/Pokedex.module.scss';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Search from './Search';
 import EntryCard from './EntryCard';
 import InfoSection from './InfoSection';
 import { Container, Typography } from '@mui/material';
-import { FormatColorText, WaterDrop, Favorite, FilePresent } from '@mui/icons-material/';
+import { FormatColorText, WaterDrop, Favorite } from '@mui/icons-material/';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemon, IPokemonData, IPokemonInfo } from '@/types/PokeApp';
 
-const Pokedex = (props: any) => {
-  const [formats, setFormats]: any = useState(() => ['text']);
-  let [pokemonList, setPokemonList]: any = useState([]);
-  let [searchList, setSearchList]: any = useState([]);
-  let [selectedPokemon, setSelectedPokemon]: any = useState();
-  let [favoritesList, setFavoritesList]: any = useState([]);
+const Pokedex = () => {
+  const { pokemonList }: { pokemonList: any } = useContext(PokeAppContext);
+
+  const [formats, setFormats] = useState<string[]>(() => ['text']);
+  let [resultList, setResultList] = useState<IPokemonData[]>([]);
+  let [searchList, setSearchList] = useState<IPokemonData[]>([]);
+  let [favoritesList, setFavoritesList] = useState<IPokemonData[]>([]);
+  let [selectedPokemon, setSelectedPokemon] = useState<IPokemonData>();
 
   useEffect(() => {
-    sortList(props.pokemonList);
-  }, [props.pokemonList]);
+    sortList(pokemonList);
+  }, [pokemonList]);
 
   useEffect(() => {
     if (formats.indexOf('faves') > -1) {
       setSearchList(favoritesList);
     } else {
-      setSearchList(pokemonList);
+      setSearchList(resultList);
     }
   }, [formats]);
 
-  const sortList = (list: any) => {
-    const sortedList = list.sort((a: any, b: any) => (a.id > b.id ? 1 : -1));
-    setPokemonList(sortedList);
+  const sortList = (list: IPokemonData[]) => {
+    const sortedList: IPokemonData[] = list.sort((a: IPokemonData, b: IPokemonData) => (a.id > b.id ? 1 : -1));
+    setResultList(sortedList);
     setSearchList(sortedList);
   };
 
-  const handleFormat = (e: any, newFormats: string[]) => {
-    setFormats(newFormats);
-  };
+  const handleFormat = (event: MouseEvent<HTMLElement>, newFormats: string[]) => setFormats(newFormats);
 
   return (
     <Container sx={{ my: 4 }}>
@@ -42,7 +44,7 @@ const Pokedex = (props: any) => {
         Pokedex
       </Typography>
       <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-        <Search pokemonList={pokemonList} favoritesList={favoritesList} searchBy={formats} setSearchList={setSearchList} />{' '}
+        <Search resultList={resultList} favoritesList={favoritesList} searchBy={formats} setSearchList={setSearchList} />{' '}
         {/* improve to search by other categories */}
         <ToggleButtonGroup value={formats} onChange={handleFormat} aria-label='search-filters'>
           <ToggleButton value='text' aria-label='filter by text'>
@@ -58,7 +60,7 @@ const Pokedex = (props: any) => {
       </Box>
       <Box component='div' className={styles.container}>
         <Box component='div' className={styles.listSection}>
-          {searchList.map((pokemon: any, index: number) => (
+          {searchList.map((pokemon: IPokemonData, index: number) => (
             <EntryCard
               key={index}
               pokemon={pokemon}
@@ -70,7 +72,7 @@ const Pokedex = (props: any) => {
           ))}
         </Box>
         <Box component='div' className={styles.infoSection}>
-          <InfoSection selectedPokemon={selectedPokemon} isMobile={props.isMobile} />
+          <InfoSection selectedPokemon={selectedPokemon} />
         </Box>
       </Box>
     </Container>

@@ -1,50 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, Dispatch, SetStateAction, MouseEvent, ChangeEvent } from 'react';
 import styles from '@/styles/components/DayCare.module.scss';
-import { Box, Divider, Typography, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import { Box, Divider, Typography, FormControl, InputLabel, Select, MenuItem, Button, SelectChangeEvent } from '@mui/material';
 import { Favorite } from '@mui/icons-material';
 import { findPokeblockPref } from '@/utils/Utils';
 import Image from 'next/image';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IAlerts, IItem, IPokemon } from '@/types/PokeApp';
 
-function DayCare(props: any) {
-  const [pokeblocks, setPokeblocks]: any = useState([]);
-  const [activePokemon, setActivePokemon]: any = useState(props.team[0]);
+interface IDayCareContext {
+  setOpenAlerts: Dispatch<SetStateAction<IAlerts>>;
+  playerItems: IItem[];
+  setPlayerItems: Dispatch<SetStateAction<IItem[]>>;
+  team: IPokemon[];
+  isMobile: boolean;
+}
+
+function DayCare() {
+  const { setOpenAlerts, playerItems, setPlayerItems, team, isMobile }: IDayCareContext = useContext(PokeAppContext);
+
+  const [pokeblocks, setPokeblocks] = useState<IItem[]>([]);
+  const [activePokemon, setActivePokemon] = useState<IPokemon>(team[0]);
 
   useEffect(() => {
-    setPokeblocks(props.playerItems.filter((playerItem: any) => playerItem.type === 'Pokeblock'));
-  }, [props.playerItems, activePokemon]);
+    setPokeblocks(playerItems.filter((playerItem: IItem) => playerItem.type === 'Pokeblock'));
+  }, [playerItems, activePokemon]);
 
-  const changeActivePokemon = (e: any) => {
-    const newActivePokemon = props.team[e.target.value];
+  const changeActivePokemon = (event: SelectChangeEvent<number>) => {
+    const newActivePokemon: IPokemon = team[event.target.value as number];
     setActivePokemon(newActivePokemon);
   };
 
-  const feedPokeblock = (pokeblock: any) => {
+  const feedPokeblock = (pokeblock: IItem) => {
     if (activePokemon.affection >= 50) return;
     // raise affection more if pokeblock is preferred
     if (findPokeblockPref(activePokemon.types).includes(pokeblock.name)) {
       activePokemon.affection += 2;
-      props.setOpenAlerts({
+      setOpenAlerts({
         isOpen: true,
         msg: `${activePokemon.name} loved the ${pokeblock.name}!`,
       });
     } else {
       activePokemon.affection += 1;
-      props.setOpenAlerts({
+      setOpenAlerts({
         isOpen: true,
         msg: `${activePokemon.name} ate the ${pokeblock.name}!`,
       });
     }
     // remove pokeblock from items if only one is left
-    if (pokeblock.quantity === 1) {
-      props.setPlayerItems(props.playerItems.filter((playerItem: any) => pokeblock.id !== playerItem.id));
+    if (pokeblock.qty === 1) {
+      setPlayerItems(playerItems.filter((playerItem: IItem) => pokeblock.id !== playerItem.id));
     } else {
-      pokeblock.quantity -= 1;
-      setPokeblocks((prevState: any) => [...prevState]);
+      pokeblock.qty -= 1;
+      setPokeblocks((prevState: IItem[]) => [...prevState]);
     }
   };
 
   const petPokemon = () => {
-    props.setOpenAlerts({
+    setOpenAlerts({
       isOpen: true,
       msg: `${activePokemon.name} looks happy!`,
     });
@@ -58,7 +70,7 @@ function DayCare(props: any) {
         </Typography>
       </Box>
       <Divider sx={{ mb: 2 }} />
-      <Box component='div' display='flex' justifyContent={!props.isMobile ? 'space-between' : 'center'} flexWrap='wrap' gap={2}>
+      <Box component='div' display='flex' justifyContent={!isMobile ? 'space-between' : 'center'} flexWrap='wrap' gap={2}>
         <Box component='div' display='flex' flexDirection='column' justifyContent='center' className={styles.pokePanel}>
           <Box component='div' display='flex' alignItems='center' mb={2}>
             <Box display='flex' flexDirection='column'>
@@ -70,7 +82,7 @@ function DayCare(props: any) {
               ))}
             </Box>
             <Box component='div' className={styles.pokemonImg}>
-              <Image alt={`${props.selectedPokemon?.name} icon`} width={80} height={80} src={activePokemon.img} />
+              <Image alt={`${activePokemon?.name} icon`} width={80} height={80} src={activePokemon.img} />
             </Box>
           </Box>
           <Button variant='contained' onClick={petPokemon}>{`Pet ${activePokemon.name}`}</Button>
@@ -85,7 +97,7 @@ function DayCare(props: any) {
               value={activePokemon ? activePokemon?.order : 0}
               onChange={changeActivePokemon}
             >
-              {props.team?.map((partyPokemon: any, index: number) => {
+              {team?.map((partyPokemon: IPokemon, index: number) => {
                 return (
                   <MenuItem key={index} value={index}>
                     {partyPokemon.name}
@@ -99,7 +111,7 @@ function DayCare(props: any) {
           </Typography>
           <Box display='flex' justifyContent='center' flexWrap='wrap'>
             {pokeblocks.length > 0 ? (
-              pokeblocks.map((pokeblock: any, index: number) => (
+              pokeblocks.map((pokeblock: IItem, index: number) => (
                 <Button
                   key={index}
                   variant='outlined'
@@ -111,7 +123,7 @@ function DayCare(props: any) {
                   }}
                 >
                   {pokeblock.name.split(' ')[0]}
-                  {`\n×${pokeblock.quantity}`}
+                  {`\n×${pokeblock.qty}`}
                 </Button>
               ))
             ) : (

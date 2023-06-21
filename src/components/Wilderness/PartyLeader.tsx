@@ -1,10 +1,20 @@
-import React from 'react';
-import { Box, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
+import React, { Dispatch, MouseEvent, SetStateAction, useContext } from 'react';
+import { Box, FormControl, InputLabel, Select, MenuItem, Typography, SelectChangeEvent } from '@mui/material';
+import { IPokemon } from '@/types/PokeApp';
+import PokeAppContext from '@/contexts/PokeAppContext';
 
-function PartyLeader(props: any) {
-  const changePartyLeader = (e: any) => {
-    const newPartyLeader = props.team[e.target.value];
-    props.setPartyLeader(newPartyLeader);
+interface IPartyLeaderContext {
+  team: IPokemon[];
+  partyLeader: IPokemon;
+  setPartyLeader: Dispatch<SetStateAction<IPokemon>>;
+}
+
+function PartyLeader() {
+  const { team, partyLeader, setPartyLeader }: IPartyLeaderContext = useContext(PokeAppContext);
+
+  const changePartyLeader = (event: SelectChangeEvent<number>) => {
+    const newPartyLeader: IPokemon = team[event.target.value as number];
+    setPartyLeader(newPartyLeader);
   };
 
   return (
@@ -15,10 +25,10 @@ function PartyLeader(props: any) {
           labelId='simple-select-label'
           id='simple-select'
           label='Party Leader'
-          value={props.partyLeader ? props.partyLeader?.order : 0}
+          value={partyLeader ? partyLeader?.order : 0}
           onChange={changePartyLeader}
         >
-          {props.team?.map((partyPokemon: any, index: number) => {
+          {team?.map((partyPokemon: IPokemon, index: number) => {
             return (
               <MenuItem key={index} value={index}>
                 {partyPokemon.name}
@@ -28,8 +38,8 @@ function PartyLeader(props: any) {
         </Select>
       </FormControl>
       <Box component='div' display='flex' justifyContent='space-between' mt={1}>
-        <Typography component='span'>{`Lvl. ${props.partyLeader?.level}`}</Typography>
-        <Typography component='span'>{`HP : ${props.partyLeader?.hp} / ${props.partyLeader?.maxHp}`}</Typography>
+        <Typography component='span'>{`Lvl. ${partyLeader?.level}`}</Typography>
+        <Typography component='span'>{`HP : ${partyLeader?.hp} / ${partyLeader?.maxHp}`}</Typography>
       </Box>
     </Box>
   );

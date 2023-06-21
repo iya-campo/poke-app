@@ -1,3 +1,5 @@
+import { IItem, IPokemon, IPokemonData, IPokemonDataStats, IPokemonDataTypes, IPokemonStats } from "@/types/PokeApp";
+
 export const randomNumberGenerator = (min: number, max: number) => {
     return Math.round(Math.floor(Math.random() * (max - min + 1)) + min);
 }
@@ -19,24 +21,24 @@ export const textTransform = (string: string) => {
     return `${capitalize(words[0])}${words[1] ? ` ${capitalize(words[1])}` : ''}`
 }
 
-export const getTypes = (types: any) => {
+export const getTypes = (types: IPokemonDataTypes[]) => {
     let convertedTypes = [];
     for (let i = 0; i < types.length; i++) convertedTypes.push(types[i].type.name)
     return convertedTypes;
 }
 
-export const findMatchingTypes = (types: any, pokemon: any) => {
+export const findMatchingTypes = (types: string[], pokemon: IPokemonData) => {
     return types.some((type: string) => type === pokemon.types[0]?.type.name || type === pokemon.types[1]?.type.name);
 }
 
-export const checkItems = (items: any, itemToFind: string, returnType?: string) => {
+export const checkItems = (items: IItem[], itemToFind: string, returnType?: string) => {
     let itemExists: boolean = false;
     let itemQuantity: number = 0;
 
     items.map((item: any) => {
         if (item.name === itemToFind) {
             itemExists = true;
-            itemQuantity = item.quantity;
+            itemQuantity = item.qty;
         }
     })
     if (returnType === 'quantity') {
@@ -58,11 +60,11 @@ export const checkValuablePrice = (valuable: string) => {
     }
 }
 
-export const checkPokemonStats = (pokemonStats: any) => {
+export const checkPokemonStats = (pokemonStats: IPokemonStats[] | IPokemonDataStats[]) => {
     let avgStat: number = 0;
 
     if (pokemonStats?.length > 0) {
-        avgStat= (pokemonStats[0]?.base_stat +
+        avgStat = (pokemonStats[0]?.base_stat +
             pokemonStats[1]?.base_stat +
             pokemonStats[2]?.base_stat +
             pokemonStats[3]?.base_stat +
@@ -74,7 +76,7 @@ export const checkPokemonStats = (pokemonStats: any) => {
     return avgStat;
 }
 
-export const checkTeamStats = (team: any) => {
+export const checkTeamStats = (team: IPokemon[] | IPokemonData[]) => {
     let avgTeamStat: any = [];
     let statTotal: number = 0;
 
@@ -97,7 +99,7 @@ export const determineSuccess = (successRate: number) => {
     }
 }
 
-export const findPokeblockPref = (pokemonTypes: any) => {
+export const findPokeblockPref = (pokemonTypes: string[]) => {
     const pokeBlockPrefs: any = [];
     pokemonTypes.map((pokemonType: any) => {
         if (pokemonType === 'Water' || pokemonType === 'Ice') pokeBlockPrefs.push('Sour Pokeblock')

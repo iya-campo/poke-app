@@ -1,34 +1,43 @@
-import React from 'react';
+import React, { Dispatch, MouseEvent, SetStateAction, useContext } from 'react';
 import { Box, ButtonGroup, Button } from '@mui/material';
 import { findMatchingTypes } from '@/utils/Utils';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemonData } from '@/types/PokeApp';
 
-function Zones(props: any) {
-  const allocWildPokemon = (zone: string, wildPokemons: any) => {
-    let list = [];
+interface IZonesProps {
+  setZoneImg: Dispatch<SetStateAction<string>>;
+  setWildPokemons: Dispatch<SetStateAction<IPokemonData[]>>;
+}
+
+function Zones({ setZoneImg, setWildPokemons }: IZonesProps) {
+  const { pokemonList }: { pokemonList: any } = useContext(PokeAppContext);
+
+  const allocWildPokemon = (zone: string, wildPokemons: IPokemonData[]) => {
+    let list: IPokemonData[] = [];
     switch (zone) {
       case 'forest':
-        list = wildPokemons.filter((wildPokemon: any) => findMatchingTypes(['grass', 'normal', 'bug'], wildPokemon));
-        props.setWildPokemons(list);
-        props.setZoneImg(`url('/images/forest.png')`);
+        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(['grass', 'normal', 'bug'], wildPokemon));
+        setWildPokemons(list);
+        setZoneImg(`url('/images/forest.png')`);
         break;
       case 'ocean':
-        list = wildPokemons.filter((wildPokemon: any) => findMatchingTypes(['water', 'ice'], wildPokemon));
-        props.setWildPokemons(list);
-        props.setZoneImg(`url('/images/ocean.png')`);
+        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(['water', 'ice'], wildPokemon));
+        setWildPokemons(list);
+        setZoneImg(`url('/images/ocean.png')`);
         break;
       case 'volcano':
-        list = wildPokemons.filter((wildPokemon: any) => findMatchingTypes(['fire', 'rock', 'ground'], wildPokemon));
-        props.setWildPokemons(list);
-        props.setZoneImg(`url('/images/volcano.png')`);
+        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(['fire', 'rock', 'ground'], wildPokemon));
+        setWildPokemons(list);
+        setZoneImg(`url('/images/volcano.png')`);
         break;
       default:
         console.log('Please select a zone to explore.');
     }
   };
 
-  const selectZone = (e: any) => {
-    const zone: string = e.target.value;
-    allocWildPokemon(zone, props.pokemonList);
+  const selectZone = (event: MouseEvent<HTMLButtonElement>) => {
+    const zone: string = event.currentTarget.value;
+    allocWildPokemon(zone, pokemonList);
   };
 
   return (

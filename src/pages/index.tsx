@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Head from 'next/head';
-import Image from 'next/image';
 import { Inter } from '@next/font/google';
 import GlobalHeader from '@/shared/components/GlobalHeader';
 import Alerts from '@/shared/components/Alerts';
@@ -17,21 +15,23 @@ import pokeBag from '@/data/PokeBag';
 import myTeam from '@/data/MyTeam';
 import '../styles/index.module.scss';
 import PokemonAPI from '@/api/PokemonAPI';
+import { IAlerts, IItem, IPlayer, IPokemon } from '@/types/PokeApp';
+import PokeAppContext from '@/contexts/PokeAppContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const [playerInfo, setPlayerInfo]: any = useState([]);
-  const [playerItems, setPlayerItems]: any = useState([]);
-  const [team, setTeam]: any = useState([]);
-  const [pcStorage, setPCStorage]: any = useState([]);
-  const [partyLeader, setPartyLeader]: any = useState(team[0]);
+  const [playerInfo, setPlayerInfo] = useState<IPlayer>(player);
+  const [playerItems, setPlayerItems] = useState<IItem[]>(pokeBag);
+  const [team, setTeam] = useState<IPokemon[]>(myTeam);
+  const [pcStorage, setPCStorage] = useState<IPokemon[]>([]);
+  const [partyLeader, setPartyLeader] = useState<IPokemon>(team[0]);
 
-  const [pokemonList, setPokemonList]: any = useState([]);
-  const [openAlert, setOpenAlerts]: any = useState({ isOpen: false, msg: '' });
-  const [isInEncounter, setIsInEncounter]: any = useState(false);
+  const [pokemonList, setPokemonList] = useState<any>([]);
+  const [openAlert, setOpenAlerts] = useState<IAlerts>({ isOpen: false, msg: '' });
+  const [isInEncounter, setIsInEncounter] = useState<boolean>(false);
 
-  const [isMobile, setIsMobile]: any = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     // set initial
@@ -174,7 +174,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    let list: any = [];
+    let list: IPokemon[] = [];
     PokemonAPI.fetchPokemon().then((res) => {
       res.results.map((e: any) => {
         fetch(e.url)
@@ -191,55 +191,35 @@ export default function Home() {
   }, []);
 
   return (
-    <ThemeProvider theme={pokemonTheme}>
-      <GlobalHeader />
-      <Alerts openAlert={openAlert} setOpenAlerts={setOpenAlerts} />
-      <Greetings playerInfo={playerInfo} />
-      <Pokedex pokemonList={pokemonList} isMobile={isMobile} />
-      <Wilderness
-        team={team}
-        setTeam={setTeam}
-        playerItems={playerItems}
-        setPlayerItems={setPlayerItems}
-        setPCStorage={setPCStorage}
-        partyLeader={partyLeader}
-        setPartyLeader={setPartyLeader}
-        isInEncounter={isInEncounter}
-        setIsInEncounter={setIsInEncounter}
-        setOpenAlerts={setOpenAlerts}
-        pokemonList={pokemonList}
-      />
-      <MyTeam
-        team={team}
-        setTeam={setTeam}
-        pcStorage={pcStorage}
-        setPCStorage={setPCStorage}
-        partyLeader={partyLeader}
-        setPartyLeader={setPartyLeader}
-      />
-      <PokeMart
-        playerInfo={playerInfo}
-        setPlayerInfo={setPlayerInfo}
-        playerItems={playerItems}
-        setPlayerItems={setPlayerItems}
-        pcStorage={pcStorage}
-        setPCStorage={setPCStorage}
-        isMobile={isMobile}
-      />
-      <PokePlaza
-        playerInfo={playerInfo}
-        setPlayerInfo={setPlayerInfo}
-        playerItems={playerItems}
-        setPlayerItems={setPlayerItems}
-        team={team}
-        setTeam={setTeam}
-        partyLeader={partyLeader}
-        setPartyLeader={setPartyLeader}
-        setOpenAlerts={setOpenAlerts}
-        isInEncounter={isInEncounter}
-        pokemonList={pokemonList}
-        isMobile={isMobile}
-      />
-    </ThemeProvider>
+    <PokeAppContext.Provider
+      value={{
+        playerInfo,
+        setPlayerInfo,
+        team,
+        setTeam,
+        playerItems,
+        setPlayerItems,
+        partyLeader,
+        setPartyLeader,
+        pcStorage,
+        setPCStorage,
+        isInEncounter,
+        setIsInEncounter,
+        pokemonList,
+        setOpenAlerts,
+        isMobile,
+      }}
+    >
+      <ThemeProvider theme={pokemonTheme}>
+        <GlobalHeader />
+        <Alerts openAlert={openAlert} />
+        <Greetings />
+        <Pokedex />
+        <Wilderness />
+        <MyTeam />
+        <PokeMart />
+        <PokePlaza />
+      </ThemeProvider>
+    </PokeAppContext.Provider>
   );
 }
