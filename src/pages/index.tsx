@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Inter } from '@next/font/google';
 import GlobalHeader from '@/shared/components/GlobalHeader';
+import PokemonAPI from '@/api/PokemonAPI';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IAlerts, IItem, IPlayer, IPokemon } from '@/types/PokeApp';
 import Alerts from '@/shared/components/Alerts';
 import Greetings from '@/components/Greetings/Greetings';
 import Pokedex from '@/components/Pokedex/Pokedex';
@@ -10,13 +13,10 @@ import PokeMart from '@/components/PokeMart/PokeMart';
 import PokePlaza from '@/components/PokePlaza/PokePlaza';
 import { ThemeProvider } from '@emotion/react';
 import { pokemonTheme } from '@/themes/PokemonTheme';
+import '../styles/index.module.scss';
 import player from '@/data/Player';
 import pokeBag from '@/data/PokeBag';
 import myTeam from '@/data/MyTeam';
-import '../styles/index.module.scss';
-import PokemonAPI from '@/api/PokemonAPI';
-import { IAlerts, IItem, IPlayer, IPokemon } from '@/types/PokeApp';
-import PokeAppContext from '@/contexts/PokeAppContext';
 
 const inter = Inter({ subsets: ['latin'] });
 

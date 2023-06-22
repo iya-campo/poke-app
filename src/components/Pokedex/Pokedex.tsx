@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext, ChangeEvent, MouseEvent } from 'react';
-import styles from '@/styles/components/Pokedex.module.scss';
-import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import React, { useState, useEffect, useContext, MouseEvent } from 'react';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemonData } from '@/types/PokeApp';
 import Search from './Search';
 import EntryCard from './EntryCard';
 import InfoSection from './InfoSection';
-import { Container, Typography } from '@mui/material';
+import { Container, Typography, Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { FormatColorText, WaterDrop, Favorite } from '@mui/icons-material/';
-import PokeAppContext from '@/contexts/PokeAppContext';
-import { IPokemon, IPokemonData, IPokemonInfo } from '@/types/PokeApp';
+import styles from '@/styles/components/Pokedex.module.scss';
 
 const Pokedex = () => {
   const { pokemonList }: { pokemonList: any } = useContext(PokeAppContext);

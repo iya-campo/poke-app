@@ -1,7 +1,7 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useContext } from 'react';
-import { Box, FormControl, InputLabel, Select, MenuItem, Typography, SelectChangeEvent } from '@mui/material';
-import { IPokemon } from '@/types/PokeApp';
 import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemon } from '@/types/PokeApp';
+import { Box, FormControl, InputLabel, Select, MenuItem, Typography, SelectChangeEvent } from '@mui/material';
 
 interface IPartyLeaderContext {
   team: IPokemon[];

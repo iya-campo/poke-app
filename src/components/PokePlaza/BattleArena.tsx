@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Dispatch, SetStateAction, useContext } from 'react';
-import styles from '@/styles/components/BattleArena.module.scss';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IAlerts, IItem, IPokemon, IPokemonData } from '@/types/PokeApp';
 import { Box, Button, Typography, Divider, IconButton } from '@mui/material';
 import { Casino } from '@mui/icons-material';
+import styles from '@/styles/components/BattleArena.module.scss';
 import { randomNumberGenerator, checkTeamStats, determineSuccess } from '@/utils/Utils';
-import { IAlerts, IItem, IPokemon, IPokemonData } from '@/types/PokeApp';
-import PokeAppContext from '@/contexts/PokeAppContext';
+import { HIGH_TIER, LOW_TIER } from '@/utils/Constants';
 
 interface IBattleArenaContext {
   pokemonList: any;
@@ -43,10 +44,6 @@ function BattleArena() {
       icon: '',
     },
   ];
-
-  // team stat avg tiers
-  const HIGH_TIER: number = 75;
-  const LOW_TIER: number = 40;
 
   useEffect(() => {
     shuffleTrainer();

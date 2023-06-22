@@ -1,11 +1,11 @@
 import React, { Dispatch, MouseEvent, ReactElement, SetStateAction, useContext, useState } from 'react';
-import styles from '@/styles/components/MyTeam.module.scss';
-import { MoreVert, ArrowUpward, ArrowDownward, Computer } from '@mui/icons-material/';
-import { Container, Box, Typography, Menu, IconButton, MenuItem, Button, ListItemIcon, ListItemText, SvgIconTypeMap } from '@mui/material';
-import PCStorage from './PCStorage';
-import Image from 'next/image';
-import { IPokemon } from '@/types/PokeApp';
 import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemon } from '@/types/PokeApp';
+import PCStorage from './PCStorage';
+import { Container, Box, Typography, Menu, IconButton, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { MoreVert, ArrowUpward, ArrowDownward, Computer } from '@mui/icons-material/';
+import Image from 'next/image';
+import styles from '@/styles/components/MyTeam.module.scss';
 
 interface IMyTeamContext {
   team: IPokemon[];

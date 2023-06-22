@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Dispatch, SetStateAction, useContext } from 'react';
-import styles from '@/styles/components/PokePlaza.module.scss';
-import { Healing, Favorite, Cancel, SportsMma, LocalFlorist } from '@mui/icons-material/';
-import { Container, Box, Button, Typography } from '@mui/material';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemon, IAlerts } from '@/types/PokeApp';
 import CustomModal from '@/shared/components/CustomModal';
 import BattleArena from './BattleArena';
 import DayCare from './DayCare';
-import { IPokemon, IAlerts } from '@/types/PokeApp';
-import PokeAppContext from '@/contexts/PokeAppContext';
+import { Container, Box, Button, Typography } from '@mui/material';
+import { Healing, Favorite, Cancel, SportsMma, LocalFlorist } from '@mui/icons-material/';
+import styles from '@/styles/components/PokePlaza.module.scss';
 
 interface IPokePlazaContext {
   setOpenAlerts: Dispatch<SetStateAction<IAlerts>>;

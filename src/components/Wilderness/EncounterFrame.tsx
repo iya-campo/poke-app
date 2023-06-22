@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Dispatch, SetStateAction, useContext, useRef, MouseEvent } from 'react';
-import { ArrowDropDown } from '@mui/icons-material';
-import { Box, Button, ButtonGroup, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography } from '@mui/material';
-import { capitalize, randomNumberGenerator, getTypes, checkPokemonStats, determineSuccess } from '@/utils/Utils';
-import styles from '@/styles/components/EncounterFrame.module.scss';
-import Image from 'next/image';
-import { IItem, IPokemon, IPokemonData, IPokemonStats } from '@/types/PokeApp';
 import PokeAppContext from '@/contexts/PokeAppContext';
+import { IItem, IPokemon, IPokemonData, IPokemonStats } from '@/types/PokeApp';
+import { Box, Button, ButtonGroup, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography } from '@mui/material';
+import { ArrowDropDown } from '@mui/icons-material';
+import Image from 'next/image';
+import styles from '@/styles/components/EncounterFrame.module.scss';
+import { capitalize, randomNumberGenerator, getTypes, checkPokemonStats, determineSuccess } from '@/utils/Utils';
 
 interface IEncounterFrameContext {
   isInEncounter: boolean;

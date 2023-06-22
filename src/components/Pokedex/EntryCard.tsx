@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import styles from '@/styles/components/EntryCard.module.scss';
+import { IPokemonData } from '@/types/PokeApp';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import { Favorite, FavoriteBorder } from '@mui/icons-material/';
-import { IPokemonData } from '@/types/PokeApp';
+import styles from '@/styles/components/EntryCard.module.scss';
 
 interface IEntryCardProps {
   key: number;

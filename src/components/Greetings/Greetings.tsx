@@ -1,7 +1,7 @@
+import React, { useContext } from 'react';
 import PokeAppContext from '@/contexts/PokeAppContext';
 import { IPlayer } from '@/types/PokeApp';
 import { Box, Container, Typography } from '@mui/material';
-import React, { useContext } from 'react';
 
 function Greetings() {
   const { playerInfo }: { playerInfo: IPlayer } = useContext(PokeAppContext);

@@ -18,9 +18,9 @@ function Alerts({ openAlert }: IAlertsProps) {
         timeout='auto'
         addEndListener={() => {
           const timeId: NodeJS.Timeout = setTimeout<[]>(() => {
-            // After 3 seconds close the alert
+            // After 5 seconds close the alert
             setOpenAlerts((prevState: IAlerts) => ({ ...prevState, isOpen: false }));
-          }, 3000);
+          }, 5000);
           return () => {
             clearTimeout(timeId);
           };

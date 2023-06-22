@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import styles from '@/styles/components/PCStorage.module.scss';
-import { Box, Button, Typography } from '@mui/material';
-import { capitalize } from '@/utils/Utils';
 import PokeAppContext from '@/contexts/PokeAppContext';
 import { IPokemon } from '@/types/PokeApp';
+import { Box, Button, Typography } from '@mui/material';
+import styles from '@/styles/components/PCStorage.module.scss';
+import { capitalize } from '@/utils/Utils';
 
 interface IPCStorageProps {
   withdrawPokemon: (pokemon: IPokemon) => void;

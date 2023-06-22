@@ -1,13 +1,14 @@
 import React, { useState, useEffect, Dispatch, SetStateAction, useContext } from 'react';
-import styles from '@/styles/components/Wilderness.module.scss';
-import Zones from './Zones';
-import EncounterFrame from './EncounterFrame';
-import PartyLeader from './PartyLeader';
-import { Container, Box, Button, Typography } from '@mui/material';
-import { randomNumberGenerator } from '@/utils/Utils';
-import Image from 'next/image';
-import { IItem, IPokemon, IPokemonData } from '@/types/PokeApp';
 import PokeAppContext from '@/contexts/PokeAppContext';
+import { IItem, IPokemon, IPokemonData } from '@/types/PokeApp';
+import Zones from './Zones';
+import PartyLeader from './PartyLeader';
+import EncounterFrame from './EncounterFrame';
+import { Container, Box, Button, Typography } from '@mui/material';
+import Image from 'next/image';
+import styles from '@/styles/components/Wilderness.module.scss';
+import { randomNumberGenerator } from '@/utils/Utils';
+import { POKEMON_TOTAL } from '@/utils/Constants';
 
 interface IWildernessContext {
   playerItems: IItem[];
@@ -36,7 +37,7 @@ function Wilderness() {
   };
 
   const randomEncounter = () => {
-    const num: number = randomNumberGenerator(0, wildPokemons?.length + 5);
+    const num: number = randomNumberGenerator(0, POKEMON_TOTAL);
     const match: IPokemonData = wildPokemons.find((wildPokemon: IPokemonData) => wildPokemon.id === num);
     setEncounter(match);
     return match;

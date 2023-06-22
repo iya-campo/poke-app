@@ -1,4 +1,5 @@
 import { IItem, IPokemon, IPokemonData, IPokemonDataStats, IPokemonDataTypes, IPokemonStats } from "@/types/PokeApp";
+import { PREFERS_SOUR, PREFERS_SPICY, PREFERS_SWEET } from "./Constants";
 
 export const randomNumberGenerator = (min: number, max: number) => {
     return Math.round(Math.floor(Math.random() * (max - min + 1)) + min);
@@ -17,12 +18,12 @@ export const replaceAll = (string: string, mapObj: any) => {
 }
 
 export const textTransform = (string: string) => {
-    const words = string.split(/[-_]/);
+    const words: string[] = string.split(/[-_]/);
     return `${capitalize(words[0])}${words[1] ? ` ${capitalize(words[1])}` : ''}`
 }
 
 export const getTypes = (types: IPokemonDataTypes[]) => {
-    let convertedTypes = [];
+    let convertedTypes: string[] = [];
     for (let i = 0; i < types.length; i++) convertedTypes.push(types[i].type.name)
     return convertedTypes;
 }
@@ -35,7 +36,7 @@ export const checkItems = (items: IItem[], itemToFind: string, returnType?: stri
     let itemExists: boolean = false;
     let itemQuantity: number = 0;
 
-    items.map((item: any) => {
+    items.map((item: IItem) => {
         if (item.name === itemToFind) {
             itemExists = true;
             itemQuantity = item.qty;
@@ -77,10 +78,10 @@ export const checkPokemonStats = (pokemonStats: IPokemonStats[] | IPokemonDataSt
 }
 
 export const checkTeamStats = (team: IPokemon[] | IPokemonData[]) => {
-    let avgTeamStat: any = [];
+    let avgTeamStat: number[] = [];
     let statTotal: number = 0;
 
-    team.map((pokemon: any) => {
+    team.map((pokemon: IPokemon | IPokemonData) => {
         avgTeamStat.push(checkPokemonStats(pokemon?.stats))
     })
     
@@ -100,11 +101,11 @@ export const determineSuccess = (successRate: number) => {
 }
 
 export const findPokeblockPref = (pokemonTypes: string[]) => {
-    const pokeBlockPrefs: any = [];
-    pokemonTypes.map((pokemonType: any) => {
-        if (pokemonType === 'Water' || pokemonType === 'Ice') pokeBlockPrefs.push('Sour Pokeblock')
-        if (pokemonType === 'Grass' || pokemonType === 'Normal' || pokemonType === 'Flying') pokeBlockPrefs.push('Sweet Pokeblock')
-        if (pokemonType === 'Fire' || pokemonType === 'Rock' || pokemonType === 'Ground') pokeBlockPrefs.push('Spicy Pokeblock')
+    const pokeBlockPrefs: string[] = [];
+    pokemonTypes.map((pokemonType: string) => {
+        if (PREFERS_SOUR.includes(pokemonType.toLowerCase())) pokeBlockPrefs.push('Sour Pokeblock');
+        if (PREFERS_SWEET.includes(pokemonType.toLowerCase())) pokeBlockPrefs.push('Sweet Pokeblock');
+        if (PREFERS_SPICY.includes(pokemonType.toLowerCase())) pokeBlockPrefs.push('Spicy Pokeblock');
     })
     return pokeBlockPrefs;
 }

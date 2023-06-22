@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { IPokemonData } from '@/types/PokeApp';
 import { Box, Input, InputAdornment } from '@mui/material';
 import { Close } from '@mui/icons-material/';
-import { IPokemonData } from '@/types/PokeApp';
 
 interface ISearchProps {
   resultList: IPokemonData[];

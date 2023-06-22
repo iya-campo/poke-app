@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Dispatch, SetStateAction, useContext, MouseEvent, SyntheticEvent } from 'react';
-import styles from '@/styles/components/PokeMart.module.scss';
-import { Container, Box, Typography, Button, Tabs, Tab } from '@mui/material';
-import pokeMart from '@/data/PokeMart';
-import { checkPokemonStats, checkValuablePrice } from '@/utils/Utils';
-import ShopItem from './ShopItem';
-import { ICartItem, IItem, IPlayer, IPokemon, IPokemonStats } from '@/types/PokeApp';
 import PokeAppContext from '@/contexts/PokeAppContext';
+import { ICartItem, IItem, IPlayer, IPokemon, IPokemonStats } from '@/types/PokeApp';
+import ShopItem from './ShopItem';
+import { Container, Box, Typography, Button, Tabs, Tab } from '@mui/material';
+import styles from '@/styles/components/PokeMart.module.scss';
+import { checkPokemonStats, checkValuablePrice } from '@/utils/Utils';
+import { HIGH_TIER, LOW_TIER } from '@/utils/Constants';
+import pokeMart from '@/data/PokeMart';
 
 interface IPokeMartContext {
   playerInfo: IPlayer;
@@ -25,10 +26,6 @@ function PokeMart() {
   const [shopItems, setShopItems] = useState<ICartItem[]>([]);
   const [cartItems, setCartItems] = useState<ICartItem[]>([]);
   const [selectedTab, setSelectedTab] = useState<number>(0);
-
-  // pokemon stat avg tiers
-  const HIGH_TIER: number = 75;
-  const LOW_TIER: number = 40;
 
   useEffect(() => {
     setShopItems(pokeMart);

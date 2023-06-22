@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
+import PokeAppContext from '@/contexts/PokeAppContext';
+import { IPokemonData, IPokemonDataStats, IPokemonInfo } from '@/types/PokeApp';
 import { Box, Typography } from '@mui/material';
-import { capitalize, textTransform } from '@/utils/Utils';
 import Image from 'next/image';
 import styles from '../../styles/components/InfoSection.module.scss';
-import { IPokemonData, IPokemonDataStats, IPokemonInfo } from '@/types/PokeApp';
-import PokeAppContext from '@/contexts/PokeAppContext';
+import { capitalize, textTransform } from '@/utils/Utils';
 
 interface IInfoSectionProps {
   selectedPokemon: IPokemonData;
@@ -64,8 +64,8 @@ function InfoSection({ selectedPokemon }: IInfoSectionProps) {
           <Box component='div' id='infoContainer' className={styles.infoContainer}>
             <Box component='div' display='flex' flexDirection='column' maxWidth={310} rowGap={2}>
               {pokemon &&
-                Object.entries(pokemon).map(([key, value]: any) => (
-                  <Box component='div'>
+                Object.entries(pokemon).map(([key, value]: any, index: number) => (
+                  <Box component='div' key={index}>
                     <Typography key={key} component='h4' variant='h4' aria-label='Name' pr={1}>
                       {`${key !== 'name' ? (key !== 'base_experience' ? `${capitalize(textTransform(key))}` : `${capitalize(key)}`) : ''}`}
                       {`${key !== 'name' ? ':' : ''}`}

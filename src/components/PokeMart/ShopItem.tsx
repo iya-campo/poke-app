@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { Box, Button, Typography } from '@mui/material';
-
-import { checkItems } from '@/utils/Utils';
 import PokeAppContext from '@/contexts/PokeAppContext';
 import { ICartItem, IItem } from '@/types/PokeApp';
+import { Box, Button, Typography } from '@mui/material';
+import { checkItems } from '@/utils/Utils';
 
 interface IShopItemProps {
   key: number;

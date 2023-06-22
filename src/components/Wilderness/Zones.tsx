@@ -1,8 +1,8 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useContext } from 'react';
-import { Box, ButtonGroup, Button } from '@mui/material';
-import { findMatchingTypes } from '@/utils/Utils';
 import PokeAppContext from '@/contexts/PokeAppContext';
 import { IPokemonData } from '@/types/PokeApp';
+import { Box, ButtonGroup, Button } from '@mui/material';
+import { findMatchingTypes } from '@/utils/Utils';
 
 interface IZonesProps {
   setZoneImg: Dispatch<SetStateAction<string>>;
