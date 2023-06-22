@@ -1,8 +1,9 @@
 import React, { Dispatch, MouseEvent, SetStateAction, useContext } from 'react';
 import PokeAppContext from '@/contexts/PokeAppContext';
 import { IPokemonData } from '@/types/PokeApp';
-import { Box, ButtonGroup, Button } from '@mui/material';
+import { Box, ButtonGroup, Button, capitalize } from '@mui/material';
 import { findMatchingTypes } from '@/utils/Utils';
+import { ZONES, ZONE_FOREST, ZONE_OCEAN, ZONE_VOLCANO } from '@/utils/Constants';
 
 interface IZonesProps {
   setZoneImg: Dispatch<SetStateAction<string>>;
@@ -16,23 +17,19 @@ function Zones({ setZoneImg, setWildPokemons }: IZonesProps) {
     let list: IPokemonData[] = [];
     switch (zone) {
       case 'forest':
-        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(['grass', 'normal', 'bug'], wildPokemon));
-        setWildPokemons(list);
-        setZoneImg(`url('/images/forest.png')`);
+        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(ZONE_FOREST, wildPokemon));
         break;
       case 'ocean':
-        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(['water', 'ice'], wildPokemon));
-        setWildPokemons(list);
-        setZoneImg(`url('/images/ocean.png')`);
+        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(ZONE_OCEAN, wildPokemon));
         break;
       case 'volcano':
-        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(['fire', 'rock', 'ground'], wildPokemon));
-        setWildPokemons(list);
-        setZoneImg(`url('/images/volcano.png')`);
+        list = wildPokemons.filter((wildPokemon: IPokemonData) => findMatchingTypes(ZONE_VOLCANO, wildPokemon));
         break;
       default:
         console.log('Please select a zone to explore.');
     }
+    setWildPokemons(list);
+    setZoneImg(`url('/images/${zone}.png')`);
   };
 
   const selectZone = (event: MouseEvent<HTMLButtonElement>) => {
@@ -43,15 +40,11 @@ function Zones({ setZoneImg, setWildPokemons }: IZonesProps) {
   return (
     <Box>
       <ButtonGroup variant='contained' aria-label='outlined button group'>
-        <Button value={'forest'} onClick={selectZone}>
-          Forest
-        </Button>
-        <Button value={'ocean'} onClick={selectZone}>
-          Ocean
-        </Button>
-        <Button value={'volcano'} onClick={selectZone}>
-          Volcano
-        </Button>
+        {ZONES.map((zone: string, index: number) => (
+          <Button key={index} value={zone} onClick={selectZone}>
+            {capitalize(zone)}
+          </Button>
+        ))}
       </ButtonGroup>
     </Box>
   );

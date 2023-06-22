@@ -3,6 +3,7 @@ import { IPokemonData } from '@/types/PokeApp';
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import { Favorite, FavoriteBorder } from '@mui/icons-material/';
 import styles from '@/styles/components/EntryCard.module.scss';
+import { capitalize } from '@/utils/Utils';
 
 interface IEntryCardProps {
   key: number;
@@ -43,7 +44,7 @@ const EntryCard = ({ pokemon, selectedPokemon, setSelectedPokemon, favoritesList
         className={styles.card}
       >
         <Typography component='span' sx={{ textAlign: 'left', flexGrow: '1' }}>
-          {pokemon.name}
+          {capitalize(pokemon.name.toLowerCase())}
         </Typography>
         <IconButton component='label' aria-label='add to favorites' color='primary' onClick={() => handleFavorites(pokemon)}>
           {favoritesList.includes(pokemon) ? <Favorite /> : <FavoriteBorder />}
