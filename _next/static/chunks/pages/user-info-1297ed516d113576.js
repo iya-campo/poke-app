@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[152],{2614:function(n,u,e){(window.__NEXT_P=window.__NEXT_P||[]).push(["/user-info",function(){return e(3961)}])},3961:function(n,u,e){"use strict";e.r(u);var t=e(5893);e(7294);let _=()=>(0,t.jsx)(t.Fragment,{children:"User Info"});u.default=_}},function(n){n.O(0,[774,888,179],function(){return n(n.s=2614)}),_N_E=n.O()}]);
