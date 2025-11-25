@@ -29,7 +29,7 @@ function Zones({ setZoneImg, setWildPokemons }: IZonesProps) {
         console.log('Please select a zone to explore.');
     }
     setWildPokemons(list);
-    setZoneImg(`url(/poke-app/images/${zone}.png)`);
+    setZoneImg(`url(/images/${zone}.png)`);
   };
 
   const selectZone = (event: MouseEvent<HTMLButtonElement>) => {

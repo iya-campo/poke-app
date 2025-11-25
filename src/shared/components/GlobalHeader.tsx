@@ -7,7 +7,7 @@ function GlobalHeader() {
     <Box bgcolor='black' py={4}>
       <Container sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box component='div' display='flex' alignItems='center'>
-          <Image alt='poke-app logo' width={30} height={30} src={'/poke-app/images/poke-app.png'}></Image>
+          <Image alt='poke-app logo' width={30} height={30} src={'/images/poke-app.png'}></Image>
           <Typography
             component='h1'
             textAlign='center'
