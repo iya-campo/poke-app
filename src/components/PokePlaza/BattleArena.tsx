@@ -140,7 +140,7 @@ function BattleArena() {
       <Divider sx={{ mb: 2 }} />
       <Box component='div' display='flex' justifyContent={!isMobile ? 'space-between' : 'center'} flexWrap='wrap' rowGap={2}>
         <Box display='flex' flexDirection='column' mx={3} className={styles.trainerPanel}>
-          <Box className={styles.trainerImg} sx={{ backgroundImage: `url(/images/trainer.png)` }} />
+          <Box className={styles.trainerImg} sx={{ backgroundImage: `url(/poke-app/images/trainer.png)` }} />
           <Box textAlign='center' pt={2}>
             <Typography component='h4' variant='h4' display='inline-block'>{`Difficulty:`}</Typography>
             <Typography

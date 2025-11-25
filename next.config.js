@@ -6,8 +6,9 @@ const nextConfig = {
     loader: 'akamai',
     path: '',
     unoptimized: true,
+    distDir: 'build',
   },
-  exportTrailingSlash: true,
+  trailingSlash: true,
   basePath: '/poke-app',
 };
 
