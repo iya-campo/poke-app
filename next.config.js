@@ -7,6 +7,8 @@ const nextConfig = {
     path: '',
     unoptimized: true,
   },
+  exportTrailingSlash: true,
+  basePath: '/poke-app',
 };
 
 module.exports = nextConfig;
